@@ -1,0 +1,13 @@
+{
+  "tasks": {
+    "start": "deno run --allow-net --allow-read --allow-write --allow-env --allow-ffi server.ts",
+    "dev": "deno run --allow-net --allow-read --allow-write --allow-env --allow-ffi --watch server.ts",
+    "migrate": "deno run --allow-read --allow-write --allow-env --allow-ffi migrate.ts"
+  },
+  "imports": {
+    "hono": "https://deno.land/x/hono@v4.3.0/mod.ts",
+    "hono/cors": "https://deno.land/x/hono@v4.3.0/middleware/cors/index.ts",
+    "hono/logger": "https://deno.land/x/hono@v4.3.0/middleware/logger/index.ts",
+    "@db/sqlite": "jsr:@db/sqlite@^0.11"
+  }
+}

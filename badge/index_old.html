@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Go Talent - Atelier d'échanges</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#1a202c">
+    <meta name="description" content="Application Go Talent pour Atelier d'échanges">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/icon-16x16.png">
+    <link rel="apple-touch-icon" href="/icons/icon-192x192.png">
+    
+
+</head>
+<body class="min-h-screen text-white" style="
+  background: 
+    radial-gradient(circle at 20% 30%, rgba(255, 87, 34, 0.2) 0%, transparent 60%),
+    radial-gradient(circle at 70% 80%, rgba(255, 152, 0, 0.15) 0%, transparent 60%),
+    linear-gradient(135deg, #2f2f2f 0%, #1b1b1b 30%, #4e342e 60%, #212121 100%);
+  background-blend-mode: overlay;
+  background-color: #1c1c1c;
+  background-size: cover;
+  height: 100vh;
+  color: #F3E5AB;
+">
+    <!-- Background Animation -->
+    <div class="text-ribbon-container" id="textRibbonContainer">
+        <!-- Text ribbons will be dynamically loaded here -->
+    </div>
+
+    <!-- Main Container -->
+    <div class="relative z-10">
+        <!-- Login Page -->
+        <div id="loginPage" class="centered-container">
+            <div class="login-glass p-8 rounded-xl shadow-2xl w-full max-w-md border" style="border-color: #DAA520;">
+                <div class="text-center mb-8">
+                    <div class="mb-4">
+                        <div class="h-32 mx-auto rounded-full flex items-center justify-center">
+                           <img src="logo.png" alt="Go Talent Logo" class=" h-32">
+                        </div>
+                    </div>
+                    <p class=" text-xs mb-4" style="color: #F3E5AB;">Go-Talent vous accceuille à son atelier d'échange</p>
+                    <h1 class="text-4xl font-bold my-2 mining-text-shadow mining-font" style="color: #DAA520;">DE LA ROCHE AU MÉTAL</h1>
+                    <p class="text-sm mt-2 id-card-font" style="color: #F3E5AB;">La Chaîne de Valeur</p>
+                </div>
+                
+                <form id="loginForm" class="space-y-6">
+                 <div class="mt-4 text-xs text-center " style="color: #F3E5AB;">
+                        Veuillez entrer votre adresse email pour afficher les détails de votre invitation.
+                    </div>
+                    <div>
+                        <label for="email" class="block text-sm font-medium mb-2 " style="color: #F3E5AB;">
+                            Adresse email
+                        </label>
+                        <input 
+                            type="email" 
+                            id="email" 
+                            required 
+                            class="w-full px-4 py-3 glass-morphism-dark border rounded-lg focus:ring-2 focus:border-transparent"
+                            style="border-color: #DAA520; color: #F3E5AB; --tw-ring-color: #DAA520;"
+                            placeholder="gotalent@gmail.com"
+                        >
+                    </div>
+                    
+                    <button 
+                        type="submit" 
+                        class="w-full font-bold py-3 px-4 transition duration-200 shadow-lg mining-font rounded-lg pulse-glow"
+                        style="background-color: #DAA520; color: #2C1810;"
+                    >
+                        CONFIRMER
+                    </button>
+                    
+                   
+                </form>
+                
+                <div id="errorMessage" class="mt-4 text-red-400 text-sm text-center hidden"></div>
+                
+                <!-- Debug Panel (remove in production) -->
+                <div id="debugPanel" class="mt-6 p-4 glass-morphism-dark rounded-lg text-xs border" style="border-color: #DAA520;">
+                    <div class="mb-2" style="color: #DAA520;">Debug Info:</div>
+                    <div id="debugInfo" class="font-mono max-h-32 overflow-y-auto" style="color: #F3E5AB;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Page -->
+        <div id="mainPage" class="centered-container hidden">
+            <div class="w-full max-w-4xl">
+                <!-- Header -->
+                <div class="flex justify-between items-center mb-8">
+                    <div>
+                        <h1 class="text-3xl font-bold mining-text-shadow mining-font" style="color: #F3E5AB;">GO TALENT</h1>
+                        <p class="id-card-font" style="color: #DAA520;">De la Roche au Métal</p>
+                    </div>
+                    <button 
+                        id="logoutBtn" 
+                        class="px-6 py-3 rounded-lg transition duration-200 shadow-lg border id-card-font font-semibold"
+                        style="background-color: #DAA520; border-color: #DAA520; color: #2C1810;"
+                    >
+                        DÉCONNEXION
+                    </button>
+                </div>
+
+                <!-- ID Card -->
+                <div class="card-flip" id="participantCard">
+                    <div class="card-inner relative login-glass p-8 rounded-xl shadow-2xl w-full max-w-md border">
+                        <!-- Front of Card (ID Card Style) -->
+                        <div class="card-front card-glass rounded-xl shadow-2xl border-2 overflow-hidden" style="border-color: #DAA520;">
+                            <!-- Card Header -->
+                            <div class="p-4 text-center" style="background-color: #2C1810;">
+                                <h2 class="text-xl font-bold mining-text-shadow mining-font" style="color: #F3E5AB;">GO TALENT</h2>
+                                <p class="text-sm id-card-font" style="color: #DAA520;">De la Roche au Métal</p>
+                            </div>
+                            
+                            <!-- Card Body -->
+                            <div class="p-6 text-center">
+                                <!-- Basic Info -->
+                                <div class="mb-6 space-y-2">
+                                    <div class="font-bold text-lg mb-2 id-card-font" style="color: #2C1810;" id="participantName"></div>
+                                    <div class="text-sm id-card-font" style="color: #2C1810;" id="participantEmail"></div>
+                                    <div class="text-sm id-card-font" style="color: #2C1810;" id="participantContact"></div>
+                                </div>
+                                
+                                <!-- QR Code Center -->
+                                <div class="flex justify-center mb-4">
+                                    <div id="qrcode" class="glass-morphism-light p-3 rounded-lg border-2 shadow-inner" style="border-color: #2C1810;">
+                                        <div class="text-sm id-card-font" style="color: #2C1810;">Génération du QR code...</div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Card Footer -->
+                                <div class="text-xs mb-4 id-card-font" style="color: #2C1810;" id="participantTimestamp"></div>
+                                
+                                <button 
+                                    id="flipCardBtn" 
+                                    class="glass-morphism-dark px-4 py-2 rounded-lg text-sm transition duration-200 shadow-md hover:backdrop-blur-xl id-card-font"
+                                    style="color: #F3E5AB;"
+                                    title="Voir plus d'informations"
+                                >
+                                    Plus d'infos
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Back of Card (Additional Details) -->
+                        <div class="card-back absolute inset-0 login-glass rounded-xl shadow-2xl p-6 border-2" style="border-color: #DAA520;">
+                            <div class="flex justify-between items-center mb-6">
+                                <h3 class="text-xl font-bold mining-text-shadow mining-font" style="color: #F3E5AB;">Informations Détaillées</h3>
+                                <button 
+                                    id="flipBackBtn" 
+                                    class="p-2 rounded-lg transition duration-200 shadow-lg"
+                                    style="background-color: #DAA520; color: #2C1810;"
+                                    title="Retour à la carte"
+                                >
+                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M19 7v4H5.83l3.58-3.59L8 6l-6 6 6 6 1.41-1.41L5.83 13H21V7z"/>
+                                    </svg>
+                                </button>
+                            </div>
+
+                            <div class="space-y-3 overflow-y-auto max-h-80" id="participantDetails">
+                                <!-- Detailed participant info will be populated here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script type="module" src="/src/main.js"></script>
+</body>
+</html>

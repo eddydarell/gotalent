@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#2563eb">
+    <title>Go-Talent Event Scanner - Atelier d'Échanges: De la roche au métal</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/logo.svg">
+    <link rel="alternate icon" href="/favicon.ico">
+
+    <!-- PWA Manifest will be injected by Vite PWA plugin -->
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- HTML5 QR Code Library will be imported in the module -->
+    
+    <!-- Apple touch icon will be handled by Vite PWA plugin -->
+    
+    <style>
+      #qr-reader {
+          width: 100%;
+          max-width: 500px;
+          border-radius: 0.5rem; /* Keep rounded corners */
+      }
+      
+      #qr-reader__dashboard_section_swaplink {
+          display: none !important;
+      }
+      
+      .scanner-container {
+          max-width: 600px;
+          margin: 0 auto;
+      }
+
+      /* Style html5-qrcode elements to match our app design */
+      #qr-reader button {
+          background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
+          color: white !important;
+          border: none !important;
+          border-radius: 0.5rem !important;
+          padding: 12px 24px !important;
+          font-weight: 600 !important;
+          font-size: 14px !important;
+          transition: all 0.2s ease !important;
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+          margin: 8px !important;
+      }
+
+      #qr-reader button:hover {
+          background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%) !important;
+          transform: translateY(-1px) !important;
+          box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+      }
+
+      #qr-reader select {
+          background-color: white !important;
+          border: 2px solid #e5e7eb !important;
+          border-radius: 0.5rem !important;
+          padding: 8px 12px !important;
+          font-size: 14px !important;
+          color: #374151 !important;
+          margin: 4px !important;
+      }
+
+      #qr-reader select:focus {
+          border-color: #2563eb !important;
+          box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1) !important;
+        outline: none !important;
+      }
+
+      /* Style the video element */
+      #qr-reader video {
+          border-radius: 0.5rem !important;
+          border: 2px solid #e5e7eb !important;
+      }
+
+      /* Style the qr-box */
+      #qr-reader canvas {
+          border-radius: 0.5rem !important;
+      }
+
+      /* Style the dashboard section */
+      #qr-reader__dashboard_section {
+          background-color: #f9fafb !important;
+          border-radius: 0.5rem !important;
+          padding: 16px !important;
+          margin-top: 16px !important;
+          border: 1px solid #e5e7eb !important;
+      }
+
+      /* Style status messages */
+      #qr-reader__status_span {
+          color: #374151 !important;
+          font-size: 14px !important;
+          font-weight: 500 !important;
+      }
+
+      /* Hide unwanted elements */
+      #qr-reader__dashboard_section_csr {
+          display: none !important;
+      } 
+  </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col">
+    <div class="container mx-auto px-4 py-4 flex-grow">
+        <!-- Header -->
+        <div class="text-center mb-4">
+            <h1 class="text-xl text-gray-600 ">Atelier d'échanges</h1>
+            <h1 class="text-2xl font-bold text-gray-900 mb-2">DE LA ROCHE AU METAL</h1>
+            <p class="text-gray-600 text-sm">Scannez le QR code des participants pour vérifier leur inscription à l'événement</p>
+            <p class="text-gray-600 text-sm">Chaque participant peut générer son propre code QR en visitant son profil à l'adresse suivante : <a href="#" class="text-blue-600">monprofil.gotalent.com</a>.</p>
+        </div>
+
+        <!-- Main Content -->
+        <div class="max-w-md mx-auto space-y-6">
+            <!-- Main Scanner Section -->
+            <div id="permission-request" class="bg-white rounded-xl shadow-lg p-4 text-center">
+                <!-- Welcome Section (hidden when scanning) -->
+                <div id="welcome-section" class="mb-4 mt-2">
+                    <div class="w-56 h-56 border border-2 rounded-xl flex items-center justify-center mx-auto mb-4">
+                        <svg id="qr-logo" xmlns="http://www.w3.org/2000/svg" width="800px" height="800px" viewBox="0 0 24 24" fill="#2563eb"><path d="M3 9h6V3H3zm1-5h4v4H4zm1 1h2v2H5zm10 4h6V3h-6zm1-5h4v4h-4zm1 1h2v2h-2zM3 21h6v-6H3zm1-5h4v4H4zm1 1h2v2H5zm15 2h1v2h-2v-3h1zm0-3h1v1h-1zm0-1v1h-1v-1zm-10 2h1v4h-1v-4zm-4-7v2H4v-1H3v-1h3zm4-3h1v1h-1zm3-3v2h-1V3h2v1zm-3 0h1v1h-1zm10 8h1v2h-2v-1h1zm-1-2v1h-2v2h-2v-1h1v-2h3zm-7 4h-1v-1h-1v-1h2v2zm6 2h1v1h-1zm2-5v1h-1v-1zm-9 3v1h-1v-1zm6 5h1v2h-2v-2zm-3 0h1v1h-1v1h-2v-1h1v-1zm0-1v-1h2v1zm0-5h1v3h-1v1h-1v1h-1v-2h-1v-1h3v-1h-1v-1zm-9 0v1H4v-1zm12 4h-1v-1h1zm1-2h-2v-1h2zM8 10h1v1H8v1h1v2H8v-1H7v1H6v-2h1v-2zm3 0V8h3v3h-2v-1h1V9h-1v1zm0-4h1v1h-1zm-1 4h1v1h-1zm3-3V6h1v1z"/><path fill="none" d="M0 0h24v24H0z"/></svg>
+                    </div>
+                    <p class="text-gray-600 mb-4">Choisissez comment vous souhaitez vérifier l'inscription à l'événement</p>
+                </div>
+                
+                <!-- QR Reader (replaces welcome section when scanning) -->
+                <div id="qr-reader" class="hidden rounded-lg overflow-hidden mb-4"></div>
+                
+                <!-- Loading -->
+                <div id="loading" class="text-center 4 hidden">
+                    <div class="inline-block animate-spin rounded-full h-12 w-12 border-4 border-blue-600 border-t-transparent"></div>
+                    <p class="mt-4 text-gray-600 font-medium">Initialisation de la caméra...</p>
+                </div>
+                
+                <!-- Scanner Controls -->
+                <div id="scanner-controls" class="mb-4">
+                    <!-- QR Scanner Option -->
+                    <button id="start-scan-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-200 shadow-md mb-4">
+                        <svg class="w-5 h-5 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        </svg>
+                        Scanner un code QR
+                    </button>
+                    
+                    <button id="stop-scan-btn" class="w-full bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg transition-colors duration-200 shadow-md mb-4 hidden">
+                        <svg class="w-5 h-5 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 10h6v4H9z"></path>
+                        </svg>
+                        Arrêter le Scan
+                    </button>
+
+                    <!-- Manual Input Option -->
+                    <div class="relative">
+                        <div class="flex items-center mb-4">
+                            <div class="flex-1 border-t border-gray-300"></div>
+                            <span class="px-2 text-gray-500 text-sm font-medium">OU</span>
+                            <div class="flex-1 border-t border-gray-300"></div>
+                        </div>
+                        <button id="toggle-manual-input" class="w-full bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-200 shadow-md">
+                            <svg class="w-5 h-5 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                            </svg>
+                            Saisir les détails
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Manual Input Form (inline with scanner) -->
+                <div id="manual-input-form" class="hidden mb-4 p-4 bg-gray-50 rounded-xl border-2 border-gray-200">
+                    <div class="space-y-4">
+                        <div>
+                            <label for="manual-input" class="block text-sm font-medium text-gray-700 mb-2">E-mail ou numéro de téléphone</label>
+                            <input type="text" id="manual-input" placeholder="Email ou numéro de téléphone" 
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
+                            
+                        </div>
+                        <div class="flex space-x-3 mt-6">
+                            <button id="submit-manual-input" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition-colors duration-200 shadow-md">
+                                <svg class="w-4 h-4 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                Vérifier
+                            </button>
+                            <button id="cancel-manual-input" class="flex-1 bg-red-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg transition-colors duration-200 shadow-md">
+                                <svg class="w-4 h-4 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                                Annuler
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Scanning Tips -->
+                <div id="scanning-tips" class="mt-6 p-4 bg-blue-50 rounded-lg hidden text-left">
+                    <h4 class="font-semibold text-blue-800 mb-2 flex items-center justify-start">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        Tips pour scanner
+                    </h4>
+                    <ul class="text-blue-700 text-sm space-y-1">
+                        <li>• Tenez votre appareil fermement</li>
+                        <li>• Assurez-vous d'avoir un bon éclairage</li>
+                        <li>• Positionnez le code QR dans le cadre</li>
+                        <li>• Gardez le code QR plat et dégagé</li>
+                        <li>• Bougez lentement votre appareil pour ajuster le focus</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Standalone Manual Input Section -->
+            <div id="standalone-manual-input" class="bg-white rounded-xl shadow-lg p-4 hidden">
+                <div class="text-center mb-4">
+                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                        </svg>
+                    </div>
+                    <h2 class="text-xl font-bold text-gray-900 mb-2">Vérification Manuelle d'Inscription</h2>
+                    <p class="text-gray-600">Entrez votre email ou numéro de téléphone pour vérifier l'inscription</p>
+                </div>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label for="standalone-manual-input" class="block text-sm font-medium text-gray-700 mb-2">Email ou Numéro de Téléphone</label>
+                        <input type="text" id="standalone-manual-input" placeholder="Email ou numéro de téléphone" 
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
+                    </div>
+                    <div class="flex space-x-3 mt-6">
+                        <button id="submit-standalone-input" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition-colors duration-200 shadow-md">
+                            <svg class="w-4 h-4 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            Vérifier
+                        </button>
+                        <button id="back-to-options" class="flex-1 bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg transition-colors duration-200 shadow-md">
+                            <svg class="w-4 h-4 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                            </svg>
+                            Retour
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Result Section -->
+            <div id="result-section" class="hidden">
+                <div class="bg-white rounded-xl shadow-lg p-4">
+                    <div id="result-content" class="space-y-4">
+                        <!-- Results will be displayed here -->
+                    </div>
+                    
+                    <div class="mt-8 text-center">
+                        <button id="scan-again-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition-colors duration-200 shadow-md">
+                            <svg class="w-5 h-5 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                            </svg>
+                            Vérifier une Autre Inscription
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Error Section -->
+            <div id="error-section" class="hidden">
+                <div class="bg-red-50 border-2 border-red-200 rounded-xl p-4">
+                    <div class="flex items-center mb-4">
+                        <div class="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center mr-4">
+                            <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                            </svg>
+                        </div>
+                        <h2 class="text-xl font-bold text-red-800">Erreur</h2>
+                    </div>
+                    <p id="error-message" class="text-red-700 mb-4"></p>
+                    
+                    <button id="retry-btn" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg transition-colors duration-200 shadow-md">
+                        Réessayer
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="text-center text-gray-500 text-xs py-4 w-full mt-auto">
+        <p>Built with ♥︎ by <span class="font-bold">Eddy Ntambwe</span></p>
+        <div class="social-links flex justify-center space-x-4 mt-2">
+            <a href="https://github.com/eddydarell" target="_blank" rel="noopener noreferrer">
+                <svg class="w-4 h-4" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8C0 11.54 2.29 14.53 5.47 15.59C5.87 15.66 6.02 15.42 6.02 15.21C6.02 15.02 6.01 14.39 6.01 13.72C4 14.09 3.48 13.23 3.32 12.78C3.23 12.55 2.84 11.84 2.5 11.65C2.22 11.5 1.82 11.13 2.49 11.12C3.12 11.11 3.57 11.7 3.72 11.94C4.44 13.15 5.59 12.81 6.05 12.6C6.12 12.08 6.33 11.73 6.56 11.53C4.78 11.33 2.92 10.64 2.92 7.58C2.92 6.71 3.23 5.99 3.74 5.43C3.66 5.23 3.38 4.41 3.82 3.31C3.82 3.31 4.49 3.1 6.02 4.13C6.66 3.95 7.34 3.86 8.02 3.86C8.7 3.86 9.38 3.95 10.02 4.13C11.55 3.09 12.22 3.31 12.22 3.31C12.66 4.41 12.38 5.23 12.3 5.43C12.81 5.99 13.12 6.7 13.12 7.58C13.12 10.65 11.25 11.33 9.47 11.53C9.76 11.78 10.01 12.26 10.01 13.01C10.01 14.08 10 14.94 10 15.21C10 15.42 10.15 15.67 10.55 15.59C13.71 14.53 16 11.53 16 8C16 3.58 12.42 0 8 0Z" transform="scale(64)" fill="#6B7280"/>
+                </svg>
+
+            </a>
+            <a href="https://www.linkedin.com/in/eddy-ntambwe-31b785b7/" target="_blank" rel="noopener noreferrer">
+                <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid" viewBox="0 0 256 256"><path d="M218.123 218.127h-37.931v-59.403c0-14.165-.253-32.4-19.728-32.4-19.756 0-22.779 15.434-22.779 31.369v60.43h-37.93V95.967h36.413v16.694h.51a39.907 39.907 0 0 1 35.928-19.733c38.445 0 45.533 25.288 45.533 58.186l-.016 67.013ZM56.955 79.27c-12.157.002-22.014-9.852-22.016-22.009-.002-12.157 9.851-22.014 22.008-22.016 12.157-.003 22.014 9.851 22.016 22.008A22.013 22.013 0 0 1 56.955 79.27m18.966 138.858H37.95V95.967h37.97v122.16ZM237.033.018H18.89C8.58-.098.125 8.161-.001 18.471v219.053c.122 10.315 8.576 18.582 18.89 18.474h218.144c10.336.128 18.823-8.139 18.966-18.474V18.454c-.147-10.33-8.635-18.588-18.966-18.453" fill="#6B7280"/></svg>
+
+            </a>
+            <a href="https://x.com/eddydarell" target="_blank" rel="noopener noreferrer">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 1200 1227"><path fill="#6B7280" d="M714.163 519.284 1160.89 0h-105.86L667.137 450.887 357.328 0H0l468.492 681.821L0 1226.37h105.866l409.625-476.152 327.181 476.152H1200L714.137 519.284h.026ZM569.165 687.828l-47.468-67.894-377.686-540.24h162.604l304.797 435.991 47.468 67.894 396.2 566.721H892.476L569.165 687.854v-.026Z"/></svg>
+            </a>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script type="module" src="/src/main.js"></script>
+    
+    <!-- Service Worker Registration will be handled by Vite PWA plugin -->
+</body>
+</html>

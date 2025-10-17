@@ -1,0 +1,35 @@
+{
+  "name": "gotalent-scanner",
+  "version": "1.0.0",
+  "description": "A PWA for scanning QR codes to check event registration status",
+  "main": "server.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "serve": "vite preview",
+    "server": "bun run server.js",
+    "dev:full": "concurrently \"bun run server\" \"bun run dev\"",
+    "start": "bun run build && bun run server",
+    "docker:build": "docker build -t gotalent-scanner .",
+    "docker:run": "docker run -p 3004:3004 -v $(pwd)/data:/data gotalent-scanner"
+  },
+  "keywords": [
+    "pwa",
+    "qr-code",
+    "scanner",
+    "vcard",
+    "event"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "animejs": "^4.1.2",
+    "html5-qrcode": "^2.3.8"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "vite": "^5.0.0",
+    "vite-plugin-pwa": "^0.17.0"
+  }
+}

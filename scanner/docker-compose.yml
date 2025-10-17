@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  gotalent-scanner:
+    build: .
+    ports:
+      - "3002:3002"  # Backend API
+      - "3003:3003"  # Frontend
+    volumes:
+      - ./data:/app/data  # Persist SQLite database
+    environment:
+      - NODE_ENV=production
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3003"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Development service (optional)
+  gotalent-scanner-dev:
+    build: 
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3002:3002"
+      - "3003:3003"
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - ./data:/app/data
+    environment:
+      - NODE_ENV=development
+    profiles:
+      - dev

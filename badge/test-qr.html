@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test QR Code</title>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js"></script>
+</head>
+<body>
+    <h1>Test QR Code Generation</h1>
+    <div id="qr-container" style="margin: 20px; padding: 20px; border: 1px solid #ccc;"></div>
+    <button onclick="generateQR()">Generate QR Code</button>
+    
+    <script>
+        function generateQR() {
+            const container = document.getElementById('qr-container');
+            container.innerHTML = 'Generating...';
+            
+            console.log('QRCode object:', typeof QRCode);
+            
+            const testData = 'Go Talent Event\nNom: Test\nEmail: test@example.com\nContact: 123456789';
+            
+            try {
+                // Create canvas element
+                const canvas = document.createElement('canvas');
+                
+                QRCode.toCanvas(canvas, testData, {
+                    width: 200,
+                    height: 200,
+                    color: {
+                        dark: '#2F1B14',
+                        light: '#ffffff'
+                    },
+                    errorCorrectionLevel: 'M'
+                }, (error) => {
+                    if (error) {
+                        console.error('Error:', error);
+                        container.innerHTML = 'Error: ' + error.message;
+                    } else {
+                        container.innerHTML = '';
+                        container.appendChild(canvas);
+                        console.log('QR Code generated successfully');
+                    }
+                });
+            } catch (error) {
+                console.error('Exception:', error);
+                container.innerHTML = 'Exception: ' + error.message;
+            }
+        }
+        
+        // Test immediately
+        window.addEventListener('load', generateQR);
+    </script>
+</body>
+</html>

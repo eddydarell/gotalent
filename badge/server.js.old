@@ -1,0 +1,332 @@
+const express = require('express');
+const cors = require('cors');
+const Database = require('better-sqlite3');
+const path = require('path');
+const fs = require('fs');
+
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+// Middleware
+app.use(cors());
+app.use(express.json());
+app.use(express.static('dist')); // Serve static files from dist directory
+
+// Initialize SQLite database
+const db = new Database('participants.db');
+
+// Create participants table if it doesn't exist
+const createTableQuery = `
+CREATE TABLE IF NOT EXISTS participants (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT,
+    email TEXT UNIQUE NOT NULL,
+    contact_number TEXT,
+    how_heard TEXT,
+    expertise_domain TEXT,
+    gender TEXT,
+    objectives TEXT,
+    expectations TEXT,
+    drink_preference TEXT,
+    timestamp TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+)`;
+
+db.exec(createTableQuery);
+
+// Create index for faster email lookups
+db.exec('CREATE INDEX IF NOT EXISTS idx_email ON participants(email)');
+
+// Function to extract name from participant data
+function extractParticipantName(participant) {
+    // Try to get "Nom complet" field first
+    const nomComplet = participant["Nom Complet"] || participant["Nom complet"];
+    if (nomComplet && nomComplet.trim()) {
+        return nomComplet.trim();
+    }
+    
+    // Fall back to email prefix if no full name
+    const email = participant.Email;
+    if (email && typeof email === 'string') {
+        const emailPrefix = email.split('@')[0];
+        return emailPrefix;
+    }
+    
+    return 'Unknown';
+}
+
+// Migration function to import data from JSON
+function migrateFromJSON() {
+    const jsonPath = path.join(__dirname, 'data', 'participants.json');
+    
+    if (!fs.existsSync(jsonPath)) {
+        console.log('No participants.json found, skipping migration');
+        return;
+    }
+
+    try {
+        const jsonData = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
+        
+        // Check if data already exists
+        const count = db.prepare('SELECT COUNT(*) as count FROM participants').get();
+        if (count.count > 0) {
+            console.log('Database already contains data, skipping migration');
+            return;
+        }
+
+        const insertStmt = db.prepare(`
+            INSERT OR IGNORE INTO participants (
+                name, email, contact_number, how_heard, expertise_domain, 
+                gender, objectives, expectations, drink_preference, timestamp
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `);
+
+        const insertMany = db.transaction((participants) => {
+            for (const participant of participants) {
+                // Find the expertise field key (it has a special apostrophe character)
+                const keys = Object.keys(participant);
+                const expertiseKey = keys.find(k => k.includes('expertise'));
+                const expertiseDomain = participant[expertiseKey];
+                
+                // Extract participant name
+                const participantName = extractParticipantName(participant);
+                
+                insertStmt.run(
+                    participantName,
+                    participant.Email,
+                    participant["Contact Number"] || null,
+                    participant["Comment avez-vous entendu parler de l'événement Go Talent ?"] || null,
+                    expertiseDomain || null,
+                    participant["Genre"] || null,
+                    participant["Quel(s) objectif(s) avez-vous en participant ?"] || null,
+                    participant["Merci de préciser ce que vous attendez de cette conférence (contenu, contacts, suivi, etc.)."] || null,
+                    participant["Boisson"] || null,
+                    participant.Timestamp || new Date().toISOString()
+                );
+            }
+        });
+
+        insertMany(jsonData);
+        console.log(`Migrated ${jsonData.length} participants to SQLite database`);
+    } catch (error) {
+        console.error('Error migrating data:', error);
+    }
+}
+
+// Run migration on startup
+migrateFromJSON();
+
+// API Routes
+
+// Get participant by email
+app.get('/api/participants/email/:email', (req, res) => {
+    try {
+        const { email } = req.params;
+        
+        const participant = db.prepare(`
+            SELECT 
+                id,
+                name,
+                email,
+                contact_number as phone,
+                expertise_domain,
+                how_heard as howHeard,
+                gender,
+                objectives,
+                expectations,
+                timestamp,
+                created_at
+            FROM participants 
+            WHERE LOWER(email) = LOWER(?)
+        `).get(email);
+
+        if (participant) {
+            // Transform data to match frontend expectations
+            const transformedParticipant = {
+                id: participant.id,
+                name: participant.name || participant.email.split('@')[0], // Use stored name or fallback to email prefix
+                email: participant.email,
+                phone: participant.phone || 'N/A',
+                company: participant.expertise_domain || 'N/A',
+                position: participant.expertise_domain || 'Participant',
+                howHeard: participant.howHeard || 'Non spécifié',
+                gender: participant.gender || 'Non spécifié',
+                objectives: participant.objectives || 'Non spécifié',
+                expectations: participant.expectations || 'Non spécifié',
+                timestamp: participant.timestamp || new Date().toISOString()
+            };
+            
+            res.json(transformedParticipant);
+        } else {
+            res.status(404).json({ error: 'Participant not found' });
+        }
+    } catch (error) {
+        console.error('Database error:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+// Get participant by ID
+app.get('/api/participants/:id', (req, res) => {
+    try {
+        const { id } = req.params;
+        
+        const participant = db.prepare(`
+            SELECT 
+                id,
+                name,
+                email,
+                contact_number as phone,
+                expertise_domain,
+                how_heard as howHeard,
+                gender,
+                objectives,
+                expectations,
+                timestamp,
+                created_at
+            FROM participants 
+            WHERE id = ?
+        `).get(id);
+
+        if (participant) {
+            // Transform data to match frontend expectations
+            const transformedParticipant = {
+                id: participant.id,
+                name: participant.name || participant.email.split('@')[0], // Use stored name or fallback to email prefix
+                email: participant.email,
+                phone: participant.phone || 'N/A',
+                company: participant.expertise_domain || 'N/A',
+                position: participant.expertise_domain || 'Participant',
+                howHeard: participant.howHeard || 'Non spécifié',
+                gender: participant.gender || 'Non spécifié',
+                objectives: participant.objectives || 'Non spécifié',
+                expectations: participant.expectations || 'Non spécifié',
+                timestamp: participant.timestamp || new Date().toISOString()
+            };
+            
+            res.json(transformedParticipant);
+        } else {
+            res.status(404).json({ error: 'Participant not found' });
+        }
+    } catch (error) {
+        console.error('Database error:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+// Get total participants count
+app.get('/api/participants/stats/count', (req, res) => {
+    try {
+        const result = db.prepare('SELECT COUNT(*) as count FROM participants').get();
+        res.json({ count: result.count });
+    } catch (error) {
+        console.error('Database error:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+// Search participants by various criteria
+app.get('/api/participants/search', (req, res) => {
+    try {
+        const { q, domain, gender, limit = 50 } = req.query;
+        
+        let query = `
+            SELECT 
+                id,
+                name,
+                email,
+                contact_number as phone,
+                expertise_domain,
+                how_heard as howHeard,
+                gender,
+                objectives,
+                expectations,
+                timestamp,
+                created_at
+            FROM participants 
+            WHERE 1=1
+        `;
+        
+        const params = [];
+        
+        if (q) {
+            query += ` AND (LOWER(name) LIKE LOWER(?) OR LOWER(email) LIKE LOWER(?) OR LOWER(expertise_domain) LIKE LOWER(?))`;
+            params.push(`%${q}%`, `%${q}%`, `%${q}%`);
+        }
+        
+        if (domain) {
+            query += ` AND LOWER(expertise_domain) LIKE LOWER(?)`;
+            params.push(`%${domain}%`);
+        }
+        
+        if (gender) {
+            query += ` AND LOWER(gender) = LOWER(?)`;
+            params.push(gender);
+        }
+        
+        query += ` ORDER BY created_at DESC LIMIT ?`;
+        params.push(parseInt(limit));
+        
+        const participants = db.prepare(query).all(...params);
+        
+        // Transform data to match frontend expectations
+        const transformedParticipants = participants.map(participant => ({
+            id: participant.id,
+            name: participant.name || participant.email.split('@')[0], // Use stored name or fallback to email prefix
+            email: participant.email,
+            phone: participant.phone || 'N/A',
+            company: participant.expertise_domain || 'N/A',
+            position: participant.expertise_domain || 'Participant',
+            howHeard: participant.howHeard || 'Non spécifié',
+            gender: participant.gender || 'Non spécifié',
+            objectives: participant.objectives || 'Non spécifié',
+            expectations: participant.expectations || 'Non spécifié',
+            timestamp: participant.timestamp || new Date().toISOString()
+        }));
+        
+        res.json(transformedParticipants);
+    } catch (error) {
+        console.error('Database error:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+// Health check endpoint for Docker
+app.get('/api/health', (req, res) => {
+    try {
+        // Check database connectivity
+        db.prepare('SELECT 1 as health').get();
+        const participantCount = db.prepare('SELECT COUNT(*) as count FROM participants').get();
+        
+        res.json({
+            status: 'healthy',
+            timestamp: new Date().toISOString(),
+            database: 'connected',
+            participants: participantCount.count
+        });
+    } catch (error) {
+        res.status(503).json({
+            status: 'unhealthy',
+            timestamp: new Date().toISOString(),
+            error: error.message
+        });
+    }
+});
+
+// Fallback route for SPA
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+});
+
+// Start server
+app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
+    console.log(`Database initialized with ${db.prepare('SELECT COUNT(*) as count FROM participants').get().count} participants`);
+});
+
+// Graceful shutdown
+process.on('SIGINT', () => {
+    console.log('\nShutting down gracefully...');
+    db.close();
+    process.exit(0);
+});

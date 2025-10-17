@@ -1,0 +1,20 @@
+# Development Dockerfile with hot reloading
+FROM node:18-alpine
+
+# Set working directory
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+
+# Install all dependencies (including dev dependencies)
+RUN npm ci
+
+# Create data directory for SQLite database
+RUN mkdir -p /app/data
+
+# Expose ports
+EXPOSE 3002 3003
+
+# Start development servers with hot reloading
+CMD ["npm", "run", "dev:full"]

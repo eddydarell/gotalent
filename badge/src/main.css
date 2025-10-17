@@ -1,0 +1,421 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=JetBrains+Mono:wght@300;400;500;600;700&family=Fira+Code:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    color: #F3E5AB;
+}
+
+.mining-font {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+}
+
+.id-card-font {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 500;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+}
+
+.contact-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.25rem;
+}
+
+.contact-icon {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    opacity: 0.7;
+}
+
+.detail-item {
+    margin-bottom: 0.75rem solid #DAA520;
+    padding: 0.75rem;
+}
+
+.detail-item:last-child {
+    margin-bottom: 0;
+}
+
+.gradient-bg {
+    background: #2C1810;
+}
+
+.mining-gradient {
+    background: #2C1810;
+}
+
+.gold-gradient {
+    background: #2C1810;
+}
+
+.earth-tone-bg {
+    background: #2C1810;
+}
+
+/* Card scroll animation system - Anime.js powered */
+.card-flip {
+    width: 380px;
+    height: 580px;
+    margin: 0 auto;
+    position: relative;
+}
+
+.card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    /* Removed CSS transition - using Anime.js */
+}
+
+.card-login, .card-front, .card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 16px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+    display: flex;
+    flex-direction: column;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+
+/* Default state - show login */
+.card-login {
+    transform: rotateY(0deg);
+    z-index: 3;
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.card-front {
+    transform: rotateY(180deg);
+    z-index: 2;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.card-back {
+    transform: rotateY(0deg);
+    z-index: 1;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Flipped state - show front card */
+.card-flip.flipped .card-login {
+    transform: rotateY(-180deg);
+    opacity: 0;
+    pointer-events: none;
+}
+
+.card-flip.flipped .card-front {
+    transform: rotateY(0deg);
+    opacity: 1;
+    pointer-events: auto;
+    z-index: 3;
+}
+
+/* Scroll container */
+.card-scroll-container {
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    position: relative;
+}
+
+/* Sticky header - Anime.js animated */
+.sticky-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    /* background: linear-gradient(135deg, rgba(44, 24, 16, 0.95) 0%, rgba(44, 24, 16, 0.98) 100%); */
+    /* Removed CSS transition - using Anime.js */
+    padding: 0rem !important;
+    text-align: center;
+}
+
+/* QR Code section - Anime.js animated */
+.qr-section {
+    margin-bottom: 1rem;
+    margin-top: 2rem;
+    /* Removed CSS transition - using Anime.js */
+    transform-origin: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Contact section - Anime.js animated */
+.contact-section {
+    /* Removed CSS transition - using Anime.js */
+    opacity: 1;
+    padding: 1rem;
+}
+
+.contact-section .contact-info {
+    color:rgba(44, 24, 16, 0.95)
+}
+
+.contact-section .contact-icon {
+    color: #DAA520;
+}
+
+/* Scrolled state styles */
+.card-scroll-container.scrolled .sticky-header {
+    padding: 0.75rem;
+    border-radius: 0;
+    background: transparent;
+    backdrop-filter: blur(0px);
+    transition: background 0.3s ease, padding 0.3s ease;
+}
+
+.card-scroll-container.scrolled .qr-section {
+    transform: scale(0.1) translateY(-100px);
+    opacity: 0;
+    pointer-events: none;
+    margin-bottom: 0;
+}
+
+.card-scroll-container.scrolled .contact-section {
+    transform: translateY(-100px);
+    font-size: 1.125rem;
+    position: sticky;
+    top: 0;
+    background:  rgba(243, 229, 171, 1);
+    backdrop-filter: blur(15px);
+    padding: 1rem;
+    z-index: 15;
+    transition: all 0.1s ease, padding 0.1s ease;
+}
+
+.card-scroll-container.scrolled .contact-info {
+    margin-bottom: 0.125rem;
+    gap: 0.25rem;
+}
+
+.card-scroll-container.scrolled .contact-icon {
+    width: 12px;
+    height: 12px;
+}
+
+/* Scrollable content */
+.scrollable-content {
+    position: relative;
+    padding: 1rem;
+    min-height: calc(100vh - 320px);
+    background:  rgba(44, 24, 16, 1);
+}
+
+.initial-footer {
+    text-align: center;
+    margin-bottom: 2rem;
+    /* padding: 2rem 0; */
+}
+
+.detailed-info-section {
+    background:rgba(44, 24, 16, 1) ;
+    backdrop-filter: blur(15px);
+    border-radius: 12px;
+    padding: 0rem;
+    margin-bottom: 2rem;
+    /* border: 1px solid rgba(218, 165, 32, 0.3); */
+}
+
+.scroll-up-section {
+    text-align: center;
+    padding: 1.5rem 0;
+    border-top: 1px solid rgba(218, 165, 32, 0.2);
+}
+
+/* Glassmorphism Effects */
+.glass-morphism {
+    background: linear-gradient(135deg, rgba(218, 165, 32, 0.08) 0%, rgba(218, 165, 32, 0.12) 100%);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(218, 165, 32, 0.15);
+    box-shadow: 0 8px 32px 0 rgba(44, 24, 16, 0.4);
+}
+
+.glass-morphism-light {
+    background: linear-gradient(135deg, rgba(218, 165, 32, 0.15) 0%, rgba(218, 165, 32, 0.22) 100%);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(218, 165, 32, 0.25);
+}
+
+.glass-morphism-dark {
+    background: linear-gradient(135deg, rgba(44, 24, 16, 0.2) 0%, rgba(44, 24, 16, 0.35) 100%);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(218, 165, 32, 0.2);
+}
+
+.card-glass {
+    background: rgba(243, 229, 171, 1);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(218, 165, 32, 0.4);
+    color: #2C1810;
+}
+
+.login-glass {
+    background: linear-gradient(135deg, rgba(44, 24, 16, 0.25) 0%, rgba(44, 24, 16, 0.4) 100%);
+    backdrop-filter: blur(25px);
+    border: 1px solid rgba(218, 165, 32, 0.3);
+}
+
+/* Floating Elements */
+.floating-icons {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Text Ribbon Background */
+.text-ribbon-container {
+    position: fixed;
+    top: -20vh;
+    left: -20vw;
+    width: 150vw;
+    height: 150vh;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 1;
+    transform: rotate(-12deg);
+    opacity: 0.2;
+}
+
+.text-ribbon {
+    position: absolute;
+    white-space: nowrap;
+    font-family: 'JetBrains Mono', 'Fira Code', 'Monaco', 'Cascadia Code', 'SF Mono', monospace;
+    font-weight: 500;
+    font-size: 1.32rem;
+    letter-spacing: 0.1em;
+    line-height: 1.6;
+    animation: scroll-left 120s linear infinite;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.text-ribbon:nth-child(even) {
+    animation: scroll-right 120s linear infinite;
+}
+
+.text-ribbon.color-1 {
+    color: #8B7355;
+}
+
+.text-ribbon.color-2 {
+    color: #9B8365;
+}
+
+.text-ribbon.color-3 {
+    color: #AB9375;
+}
+
+.text-ribbon.color-4 {
+    color: #7B6345;
+}
+
+.text-ribbon.color-5 {
+    color: #6B5335;
+}
+
+.ribbon-word {
+    /* Removed CSS transition - using Anime.js */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.ribbon-word.highlighted {
+    /* Styles managed by Anime.js */
+    color: #DAA520;
+    font-weight: 700;
+}
+
+.ribbon-icon {
+    width: 18px;
+    height: 18px;
+    opacity: 0.7;
+    filter: brightness(1.1) saturate(1.3);
+}
+
+@keyframes scroll-left {
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
+}
+
+@keyframes scroll-right {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+.pulse-glow {
+    box-shadow: 0 0 20px rgba(218, 165, 32, 0.4);
+    animation: pulse-glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes pulse-glow {
+    from { 
+        box-shadow: 0 0 20px rgba(218, 165, 32, 0.4); 
+        transform: scale(1);
+    }
+    to { 
+        box-shadow: 0 0 30px rgba(218, 165, 32, 0.6), 0 0 40px rgba(218, 165, 32, 0.4); 
+        transform: scale(1.02);
+    }
+}
+
+.centered-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.mining-text-shadow {
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* Custom Scrollbar Styling */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+/* Track (background) */
+::-webkit-scrollbar-track {
+    background: rgba(44, 24, 16, 0.3);
+    border-radius: 10px;
+}
+
+/* Handle (the draggable part) */
+::-webkit-scrollbar-thumb {
+    background: rgba(44, 24, 16, 0.6);
+    border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(44, 24, 16, 0.8);
+    cursor: pointer;
+}
+
+/* Handle when being dragged */
+::-webkit-scrollbar-thumb:active {
+    background: rgba(44, 24, 16, 1);
+}

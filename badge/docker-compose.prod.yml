@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  gotalent-app:
+    build: .
+    ports:
+      - "80:3000"  # Map to port 80 for production
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - FORCE_SEED=false
+    volumes:
+      # Persist database between container restarts
+      - gotalent-prod-data:/app/participants.db
+      # Mount data directory for seed files (read-only)
+      - ./data:/app/data:ro
+    restart: always
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.5'
+        reservations:
+          memory: 256M
+          cpus: '0.25'
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # Optional: Add a reverse proxy for SSL termination
+  # nginx:
+  #   image: nginx:alpine
+  #   ports:
+  #     - "443:443"
+  #   volumes:
+  #     - ./nginx.conf:/etc/nginx/nginx.conf:ro
+  #     - ./ssl:/etc/ssl:ro
+  #   depends_on:
+  #     - gotalent-app
+  #   restart: always
+
+volumes:
+  gotalent-prod-data:
+    driver: local
+
+networks:
+  default:
+    driver: bridge

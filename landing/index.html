@@ -1,0 +1,1693 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+      http-equiv="Cache-Control"
+      content="no-cache, no-store, must-revalidate"
+    >
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>De La Roche Au Métal - Plateforme Go Talent Event</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=JetBrains+Mono:wght@300;400;500;600;700&family=Fira+Code:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    >
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          sans-serif;
+        background-blend-mode: overlay;
+        background-color: #1c1c1c;
+        background-size: cover;
+        color: #f3e5ab;
+        min-height: 100vh;
+        scroll-behavior: smooth;
+      }
+
+      /* Mining Theme Fonts */
+      .mining-font {
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+      }
+
+      .id-card-font {
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+        font-weight: 500;
+        letter-spacing: 0.8px;
+        text-transform: uppercase;
+      }
+
+      /* Text Ribbon Background */
+      .text-ribbon-container {
+        position: fixed;
+        top: -20vh;
+        left: -20vw;
+        width: 150vw;
+        height: 150vh;
+        overflow: hidden;
+        pointer-events: none;
+        z-index: 1;
+        transform: rotate(-12deg);
+        opacity: 0.2;
+      }
+
+      .text-ribbon {
+        position: absolute;
+        white-space: nowrap;
+        font-family:
+          "JetBrains Mono", "Fira Code", "Monaco", "Cascadia Code", "SF Mono",
+          monospace;
+        font-weight: 500;
+        font-size: 1.32rem;
+        letter-spacing: 0.1em;
+        line-height: 1.6;
+        animation: scroll-left 240s linear infinite;
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+      }
+
+      .text-ribbon:nth-child(even) {
+        animation: scroll-right 240s linear infinite;
+      }
+
+      .text-ribbon.color-1 {
+        color: #8b7355;
+      }
+      .text-ribbon.color-2 {
+        color: #9b8365;
+      }
+      .text-ribbon.color-3 {
+        color: #ab9375;
+      }
+      .text-ribbon.color-4 {
+        color: #7b6345;
+      }
+      .text-ribbon.color-5 {
+        color: #6b5335;
+      }
+
+      .ribbon-word {
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        transition: all 0.3s ease;
+      }
+
+      .ribbon-word.highlighted {
+        color: #daa520;
+        font-weight: 700;
+        transform: scale(1.1);
+      }
+
+      @keyframes scroll-left {
+        0% {
+          transform: translateX(100%);
+        }
+        100% {
+          transform: translateX(-100%);
+        }
+      }
+
+      @keyframes scroll-right {
+        0% {
+          transform: translateX(-100%);
+        }
+        100% {
+          transform: translateX(100%);
+        }
+      }
+
+      /* Navigation */
+      .nav-bar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(
+          135deg,
+          rgba(44, 24, 16, 0.1) 0%,
+          rgba(44, 24, 16, 0.15) 100%
+        );
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid rgba(218, 165, 32, 0.2);
+        z-index: 100;
+        padding: 0.75rem 0;
+        transition: all 0.3s ease;
+        transform: translateY(-100%);
+        opacity: 0;
+      }
+
+      .nav-bar.visible {
+        transform: translateY(0);
+        opacity: 1;
+      }
+
+      .nav-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .nav-logo {
+        font-size: 1.25rem;
+        font-weight: bold;
+        color: #daa520;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .nav-logo img {
+        height: 2.6rem;
+        width: auto;
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 1rem;
+        list-style: none;
+      }
+
+      .nav-links a {
+        color: #f3e5ab;
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        padding: 0.5rem 0.75rem;
+        border-radius: 6px;
+      }
+
+      .nav-links a:hover {
+        color: #daa520;
+        background: rgba(218, 165, 32, 0.1);
+      }
+
+      /* Main Content */
+      .main-content {
+        position: relative;
+        z-index: 10;
+      }
+
+      .section {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem 1rem;
+      }
+
+      .section:not(.hero-section) {
+        min-height: auto;
+      }
+
+      .container {
+        text-align: center;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      /* Hero Section */
+      .hero-section {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 1rem;
+      }
+
+      .hero-logo {
+        margin-bottom: 1.5rem;
+      }
+
+      .hero-logo img {
+        height: 5.2rem;
+        width: auto;
+        max-width: 100%;
+      }
+
+      .logo {
+        font-size: 3.9rem;
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        color: #daa520;
+      }
+
+      .logo img {
+        height: 5.2rem;
+        width: auto;
+      }
+
+      .tagline {
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+        opacity: 0.9;
+        color: #f3e5ab;
+      }
+
+      .hero-cta {
+        display: flex;
+        gap: 0.75rem;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-top: 1rem;
+      }
+
+      .cta-btn {
+        display: inline-block;
+        background: linear-gradient(
+          135deg,
+          rgba(218, 165, 32, 0.9) 0%,
+          rgba(218, 165, 32, 1) 100%
+        );
+        color: #2c1810;
+        padding: 0.5rem 1rem;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(218, 165, 32, 0.3);
+      }
+
+      .cta-btn:hover {
+        background: linear-gradient(
+          135deg,
+          rgba(218, 165, 32, 1) 0%,
+          rgba(238, 185, 52, 1) 100%
+        );
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(218, 165, 32, 0.4);
+      }
+
+      /* Agenda Section */
+      .agenda-section {
+        margin-bottom: 1.5rem;
+        text-align: left;
+        max-width: 1200px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .agenda-title {
+        font-size: 1.75rem;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 1rem;
+        color: #daa520;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      }
+
+      .agenda-info {
+        text-align: center;
+        margin-bottom: 1.5rem;
+        font-size: 1rem;
+      }
+
+      .agenda-info p {
+        margin-bottom: 0.25rem;
+        color: #f3e5ab;
+      }
+
+      .agenda-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        margin-top: 1rem;
+      }
+
+      .agenda-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+        padding: 1.5rem;
+        background: linear-gradient(
+          135deg,
+          rgba(44, 24, 16, 0.25) 0%,
+          rgba(44, 24, 16, 0.4) 100%
+        );
+        border-radius: 12px;
+        backdrop-filter: blur(25px);
+        border: 1px solid rgba(218, 165, 32, 0.3);
+        transition: all 0.3s ease;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+      }
+
+      .agenda-item:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+        border-color: rgba(218, 165, 32, 0.5);
+      }
+
+      .agenda-time {
+        font-weight: bold;
+        color: #daa520;
+        white-space: nowrap;
+        min-width: 140px;
+        font-size: 0.9rem;
+      }
+
+      .agenda-activity {
+        flex: 1;
+        line-height: 1.4;
+        color: #f3e5ab;
+        text-align: left !important;
+      }
+
+      .sub-item {
+        margin-left: 0.75rem;
+        font-size: 0.875rem;
+        opacity: 0.9;
+        margin-top: 0.25rem;
+      }
+
+      /* Panelists Section */
+      .panelists-section {
+        padding: 2rem 1rem;
+      }
+
+      .panelists {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+        margin-top: 1.5rem;
+        max-width: 1200px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .panelist-card {
+        border-radius: 16px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+        background: linear-gradient(
+          135deg,
+          rgba(44, 24, 16, 0.25) 0%,
+          rgba(44, 24, 16, 0.4) 100%
+        );
+        backdrop-filter: blur(25px);
+        border: 1px solid rgba(218, 165, 32, 0.3);
+        display: flex;
+        flex-direction: column;
+      }
+
+      .panelist-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+        border-color: rgba(218, 165, 32, 0.5);
+      }
+
+      .panelist-image {
+        width: 100%;
+        aspect-ratio: 1;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        filter: sepia(0.6) saturate(0.8) contrast(1.1);
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .panelist-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        filter: sepia(0.6) saturate(0.8) contrast(1.1);
+      }
+
+      .panelist-details {
+        padding: 1.5rem;
+        color: #f3e5ab;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        min-width: 0;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+      }
+
+      .panelist-name {
+        font-size: 1.25rem;
+        color: #daa520;
+        margin-bottom: 0.75rem;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+      }
+
+      .panelist-contact {
+        font-size: 0.875rem;
+        opacity: 0.9;
+        margin-bottom: 0.75rem;
+        font-weight: 500;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+      }
+
+      .panelist-expertise {
+        font-size: 0.9rem;
+        line-height: 1.4;
+        opacity: 0.95;
+        font-weight: 600;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+      }
+
+      /* Services Section */
+      .services-section {
+        padding: 2rem 1rem;
+      }
+
+      .section-title {
+        font-size: 2rem;
+        font-weight: bold;
+        margin-bottom: 1.5rem;
+        color: #daa520;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        text-align: center;
+      }
+
+      .services {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 1.5rem;
+        max-width: 1200px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .service-card {
+        background: linear-gradient(
+          135deg,
+          rgba(44, 24, 16, 0.25) 0%,
+          rgba(44, 24, 16, 0.4) 100%
+        );
+        padding: 1.5rem;
+        border-radius: 12px;
+        backdrop-filter: blur(25px);
+        border: 1px solid rgba(218, 165, 32, 0.3);
+        transition: all 0.3s ease;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+      }
+
+      .service-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+        border-color: rgba(218, 165, 32, 0.5);
+      }
+
+      .service-card h3 {
+        font-size: 1.25rem;
+        margin-bottom: 0.75rem;
+        color: #daa520;
+        font-weight: 700;
+      }
+
+      .service-card p {
+        opacity: 0.9;
+        line-height: 1.5;
+        margin-bottom: 1rem;
+        color: #f3e5ab;
+      }
+
+      .btn {
+        display: inline-block;
+        background: linear-gradient(
+          135deg,
+          rgba(218, 165, 32, 0.9) 0%,
+          rgba(218, 165, 32, 1) 100%
+        );
+        color: #2c1810;
+        padding: 0.5rem 1rem;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(218, 165, 32, 0.3);
+      }
+
+      .btn:hover {
+        background: linear-gradient(
+          135deg,
+          rgba(218, 165, 32, 1) 0%,
+          rgba(238, 185, 52, 1) 100%
+        );
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(218, 165, 32, 0.4);
+      }
+
+      /* Footer */
+      .footer {
+        backdrop-filter: blur(10px);
+        padding: 1.5rem 1rem 1rem;
+        text-align: center;
+        margin-top: 2rem;
+      }
+
+      .footer-content {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .footer-links {
+        margin-bottom: 1rem;
+      }
+
+      .footer-links a {
+        color: #f3e5ab;
+        text-decoration: none;
+        margin: 0 0.5rem;
+        font-weight: 500;
+        transition: color 0.3s ease;
+      }
+
+      .footer-links a:hover {
+        color: #daa520;
+      }
+
+      .social-links {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin: 1rem 0;
+      }
+
+      .social-links a {
+        color: #f3e5ab;
+        transition: color 0.3s ease;
+      }
+
+      .social-links a:hover {
+        color: #daa520;
+      }
+
+      .social-links svg {
+        width: 1.25rem;
+        height: 1.25rem;
+      }
+
+      .footer-text {
+        opacity: 0.8;
+        font-size: 0.875rem;
+        color: #f3e5ab;
+      }
+
+      .footer-text p {
+        margin-bottom: 0.25rem;
+      }
+
+      /* Mobile Responsiveness */
+      @media (max-width: 768px) {
+        .nav-container {
+          flex-direction: column;
+          gap: 0.5rem;
+          padding: 0 0.5rem;
+        }
+
+        .nav-links {
+          gap: 0.75rem;
+        }
+
+        .nav-links a {
+          padding: 0.25rem 0.5rem;
+          font-size: 0.875rem;
+        }
+
+        .hero-logo img {
+          height: 3.25rem;
+        }
+
+        .logo {
+          font-size: 2.275rem;
+        }
+
+        .tagline {
+          font-size: 1rem;
+        }
+
+        .section-title {
+          font-size: 1.25rem;
+          margin-bottom: 1rem;
+        }
+
+        .services {
+          grid-template-columns: 1fr;
+        }
+
+        .panelists-section {
+          position: relative;
+        }
+
+        .panelists {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 1.5rem;
+          margin: 1.5rem 0 0 0;
+        }
+
+        .panelist-card {
+          min-width: 100%;
+          width: 100%;
+          flex-shrink: 0;
+          display: flex;
+          flex-direction: column;
+        }
+
+        .panelist-image {
+          width: 100%;
+          aspect-ratio: 1;
+          flex-shrink: 0;
+        }
+
+        .panelist-image img {
+          width: 100%;
+          height: 100%;
+          aspect-ratio: 1;
+        }
+
+        .panelist-details {
+          padding: 1.5rem;
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          text-align: left;
+          min-width: 0;
+          word-wrap: break-word;
+          overflow-wrap: break-word;
+        }
+
+        .agenda-item {
+          flex-direction: column;
+          gap: 0.5rem;
+          padding: 1rem;
+        }
+
+        .agenda-time {
+          min-width: auto;
+          font-weight: 700;
+        }
+
+        .hero-cta {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .main-content {
+          padding-top: 0;
+        }
+
+        .section {
+          padding: 1rem 1rem;
+          min-height: auto;
+        }
+
+        .hero-section {
+          min-height: 100vh;
+          padding: 2rem 1rem;
+        }
+
+        .agenda-section,
+        .service-card {
+          padding: 1rem;
+        }
+
+        .services-section {
+          padding: 1rem 0.5rem;
+        }
+
+        .footer-links {
+          display: flex;
+          flex-direction: column;
+          gap: 0.5rem;
+          align-items: center;
+        }
+
+        .footer-links a {
+          margin: 0;
+        }
+      }
+
+      @media (max-width: 480px) {
+        /* Removed font size reductions to keep agenda text readable */
+      }
+
+      /* Pulse glow animation */
+      .pulse-glow {
+        animation: pulse-glow 2s ease-in-out infinite alternate;
+      }
+
+      @keyframes pulse-glow {
+        from {
+          box-shadow: 0 4px 15px rgba(218, 165, 32, 0.3);
+          transform: scale(1);
+        }
+        to {
+          box-shadow:
+            0 8px 30px rgba(218, 165, 32, 0.5),
+            0 0 40px rgba(218, 165, 32, 0.3);
+          transform: scale(1.02);
+        }
+      }
+
+      .mining-text-shadow {
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      }
+
+      /* Password Popover Styles */
+      .password-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.8);
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+      }
+
+      .password-overlay.show {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .password-popover {
+        background: linear-gradient(
+          135deg,
+          rgba(44, 24, 16, 0.95) 0%,
+          rgba(44, 24, 16, 0.98) 100%
+        );
+        border: 2px solid rgba(218, 165, 32, 0.5);
+        border-radius: 16px;
+        padding: 2rem;
+        max-width: 400px;
+        width: 90%;
+        text-align: center;
+        backdrop-filter: blur(20px);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+        transform: scale(0.8);
+        transition: transform 0.3s ease;
+      }
+
+      .password-overlay.show .password-popover {
+        transform: scale(1);
+      }
+
+      .password-popover h3 {
+        color: #daa520;
+        margin-bottom: 1rem;
+        font-size: 1.25rem;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      }
+
+      .password-popover p {
+        color: #f3e5ab;
+        margin-bottom: 1.5rem;
+        opacity: 0.9;
+      }
+
+      .password-input {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        background: rgba(28, 28, 28, 0.8);
+        border: 2px solid rgba(218, 165, 32, 0.3);
+        border-radius: 8px;
+        color: #f3e5ab;
+        font-size: 1rem;
+        margin-bottom: 1rem;
+        transition: border-color 0.3s ease;
+      }
+
+      .password-input:focus {
+        outline: none;
+        border-color: rgba(218, 165, 32, 0.6);
+        box-shadow: 0 0 0 3px rgba(218, 165, 32, 0.1);
+      }
+
+      .password-buttons {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+      }
+
+      .password-btn {
+        padding: 0.5rem 1.5rem;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .password-btn.submit {
+        background: linear-gradient(
+          135deg,
+          rgba(218, 165, 32, 0.9) 0%,
+          rgba(218, 165, 32, 1) 100%
+        );
+        color: #2c1810;
+      }
+
+      .password-btn.submit:hover {
+        background: linear-gradient(
+          135deg,
+          rgba(218, 165, 32, 1) 0%,
+          rgba(238, 185, 52, 1) 100%
+        );
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(218, 165, 32, 0.4);
+      }
+
+      .password-btn.cancel {
+        background: rgba(139, 115, 85, 0.8);
+        color: #f3e5ab;
+        border: 1px solid rgba(218, 165, 32, 0.3);
+      }
+
+      .password-btn.cancel:hover {
+        background: rgba(139, 115, 85, 1);
+        border-color: rgba(218, 165, 32, 0.5);
+      }
+
+      .password-error {
+        color: #ff6b6b;
+        font-size: 0.875rem;
+        margin-top: 0.5rem;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .password-error.show {
+        opacity: 1;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Background Animation -->
+    <div class="text-ribbon-container" id="textRibbonContainer">
+      <!-- Text ribbons will be dynamically loaded here -->
+    </div>
+
+    <!-- Navigation -->
+    <nav class="nav-bar" id="navbar">
+      <div class="nav-container">
+        <div class="nav-logo mining-font">
+          <img src="logo.png" alt="Go Talent Logo">
+          De La Roche Au Métal
+        </div>
+        <ul class="nav-links">
+          <li><a href="#home">Accueil</a></li>
+          <li><a href="#agenda">Agenda</a></li>
+          <li><a href="#panelists">Panélistes</a></li>
+          <li><a href="#services">Participation</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <!-- Hero Section -->
+      <section id="home" class="section hero-section">
+        <div class="container">
+          <div class="hero-logo">
+            <img src="logo.png" alt="Go Talent Logo">
+          </div>
+          <div class="tagline">Atelier d'échanges de Go-Talent Event</div>
+          <div class="logo mining-font mining-text-shadow">
+            <span>De La Roche Au Métal</span>
+          </div>
+          <div class="tagline">La chaîne de valeur</div>
+
+          <p style="font-size: 1rem; margin-bottom: 1rem; opacity: 0.9">
+            📍 Go Talent Event – Kampi Ya Boma, Kolwezi<br>
+            📆 Samedi 09 août 2025 – de 12h00 à 18h30
+          </p>
+          <div class="hero-cta">
+            <a href="#agenda" class="cta-btn">Agenda</a>
+            <a href="#panelists" class="cta-btn">Panélistes</a>
+            <a href="#services" class="cta-btn">Participation</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Agenda Section -->
+      <section id="agenda" class="section">
+        <div class="container">
+          <h2 class="section-title mining-font mining-text-shadow">
+            Agenda provisoire
+          </h2>
+
+          <div class="agenda-list">
+            <div class="agenda-item">
+              <div class="agenda-time">12h00 – 13h00</div>
+              <div class="agenda-activity">Accueil & ouverture officielle</div>
+            </div>
+
+            <div class="agenda-item">
+              <div class="agenda-time">13h00 – 14h30</div>
+              <div class="agenda-activity">
+                Panel 1 : Exploration & Exploitation minière – Topographie
+              </div>
+            </div>
+
+            <div class="agenda-item">
+              <div class="agenda-time">14h30 – 16h15</div>
+              <div class="agenda-activity">
+                Panel 2 : Chimie, Procédés, Métallurgie & Résidus
+              </div>
+            </div>
+
+            <div class="agenda-item">
+              <div class="agenda-time">16h15 – 16h45</div>
+              <div class="agenda-activity">
+                Sous-panel : Technologues & Innovation
+              </div>
+            </div>
+
+            <div class="agenda-item">
+              <div class="agenda-time">16h45 – 17h45</div>
+              <div class="agenda-activity">
+                Panel 3 : RH & Leadership industriel
+                <div class="sub-item">
+                  - Question centrale : Quelle approche pour lutter contre
+                  l'obsolescence des compétences quand tout marche ?
+                </div>
+                <div class="sub-item">
+                  - Mot du Ministère de l'Emploi et Prévoyance sociale
+                </div>
+                <div class="sub-item">
+                  - Mot du Cadre Exécutif du secteur industriel
+                </div>
+              </div>
+            </div>
+
+            <div class="agenda-item">
+              <div class="agenda-time">17h45 – 18h00</div>
+              <div class="agenda-activity">Clôture & remerciements</div>
+            </div>
+
+            <div class="agenda-item">
+              <div class="agenda-time">18h00 – 18h30</div>
+              <div class="agenda-activity">
+                Networking libre & départ progressif
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Panelists Section -->
+      <section id="panelists" class="section panelists-section">
+        <div class="container">
+          <h2 class="section-title mining-font mining-text-shadow">
+            Nos Panélistes
+          </h2>
+          <div class="panelists">
+            <div class="panelist-card">
+              <div class="panelist-image">
+                <img src="assets/jacques_mbayo.jpeg" alt="Jacques Mbayo">
+              </div>
+              <div class="panelist-details">
+                <h3 class="panelist-name mining-font">
+                  Mr. Jacques Mbayo Mastaki
+                </h3>
+                <p class="panelist-contact">
+                  +243 972 020 180
+                </p>
+                <p class="panelist-expertise">
+                  Productivity and data analytics Superintendent / Ir. De Mines
+                </p>
+              </div>
+            </div>
+
+            <div class="panelist-card">
+              <div class="panelist-image">
+                <img src="assets/mick_kish.jpeg" alt="Mick Kish">
+              </div>
+              <div class="panelist-details">
+                <h3 class="panelist-name mining-font">
+                  Mr. Mick Kish
+                </h3>
+                <p class="panelist-contact">
+                  +243 995 121 966
+                </p>
+                <p class="panelist-expertise">
+                  Learning and development Lead at Glencore Mutanda Mining
+                </p>
+              </div>
+            </div>
+
+            <div class="panelist-card">
+              <div class="panelist-image">
+                <img src="assets/salva_kyoni.jpeg" alt="Salva Kyoni">
+              </div>
+              <div class="panelist-details">
+                <h3 class="panelist-name mining-font">
+                  Mme Salva Kyoni
+                </h3>
+                <p class="panelist-contact">
+                  +243 851 089 791
+                </p>
+                <p class="panelist-expertise">Modératrice</p>
+              </div>
+            </div>
+
+            <div class="panelist-card">
+              <div class="panelist-image">
+                <img
+                  src="assets/tendresse_nyaminia.jpeg"
+                  alt="Tendresse Nyaminia"
+                >
+              </div>
+              <div class="panelist-details">
+                <h3 class="panelist-name mining-font">
+                  Mme Tendresse Nyaminia
+                </h3>
+                <p class="panelist-contact">
+                  +243 976 526 415
+                </p>
+                <p class="panelist-expertise">
+                  Métallurgiste spécialisée en Metal Accounting chez ERG Africa
+                  Comide
+                </p>
+              </div>
+            </div>
+
+            <div class="panelist-card">
+              <div class="panelist-image">
+                <img
+                  src="assets/sam_mudilo.jpeg"
+                  alt="Sam Mudilo"
+                >
+              </div>
+              <div class="panelist-details">
+                <h3 class="panelist-name mining-font">
+                  Mr. Sam Mudilo
+                </h3>
+                <p class="panelist-expertise">
+                  Survey Engineer chez ERG Africa
+                </p>
+              </div>
+            </div>
+
+            <div class="panelist-card">
+              <div class="panelist-image">
+                <img
+                  src="assets/arsene_maloba.jpeg"
+                  alt="Arsène Maloba"
+                >
+              </div>
+              <div class="panelist-details">
+                <h3 class="panelist-name mining-font">
+                  Mr. Arsène Maloba
+                </h3>
+                <p class="panelist-contact">
+                  +243 992 527 295
+                </p>
+                <p class="panelist-expertise">
+                  Superintendent Hydrogeologist chez Kamoa Copper S.A.
+                </p>
+              </div>
+            </div>
+            <div class="panelist-card">
+              <div class="panelist-image">
+                <img
+                  src="assets/yves_ramil_ilayao.jpeg"
+                  alt="Yves Ramil Ilayao"
+                >
+              </div>
+              <div class="panelist-details">
+                <h3 class="panelist-name mining-font">
+                  Mr. Yves Ramil Ilayao
+                </h3>
+                <p class="panelist-contact">
+                  +243 992 527 295
+                </p>
+                <p class="panelist-expertise">
+                  Exploration and Database Geologist chez Ivanhoe Mines
+                </p>
+              </div>
+            </div>
+            <div class="panelist-card">
+              <div class="panelist-image">
+                <img
+                  src="assets/nahomi_tshikadi.jpeg"
+                  alt="Nahomi Tshikadi"
+                >
+              </div>
+              <div class="panelist-details">
+                <h3 class="panelist-name mining-font">
+                  Mme Nahomi Tshikadi
+                </h3>
+                <p class="panelist-contact">
+        
+                </p>
+                <p class="panelist-expertise">
+                  Géologue Senior At TFM
+                </p>
+              </div>
+            </div>
+            <div class="panelist-card">
+              <div class="panelist-image">
+                <img
+                  src="assets/chris_kabeya.jpeg"
+                  alt="Chris Kabeya"
+                >
+              </div>
+              <div class="panelist-details">
+                <h3 class="panelist-name mining-font">
+                  Mr. Chris Kabeya
+                </h3>
+                <p class="panelist-contact">
+        
+                </p>
+                <p class="panelist-expertise">
+                  HR systems Officer chez Kamoa Copper 
+                </p>
+              </div>
+            </div>
+            <div class="panelist-card">
+              <div class="panelist-image">
+                <img
+                  src="assets/eddy_ntambwe.jpeg"
+                  alt="Eddy Ntambwe"
+                >
+              </div>
+              <div class="panelist-details">
+                <h3 class="panelist-name mining-font">
+                  Mr. Eddy Ntambwe
+                </h3>
+                <p class="panelist-contact">
+                  +46 76 138 14 88
+                </p>
+                <p class="panelist-expertise">
+                  Senior Software Engineer chez Capgemini
+                </p>
+              </div>
+            </div>
+            <div class="panelist-card">
+              <div class="panelist-image">
+                <img
+                  src="assets/nana_lenge.jpeg"
+                  alt="Nana Lenge"
+                >
+              </div>
+              <div class="panelist-details">
+                <h3 class="panelist-name mining-font">
+                  Mme Nana Lenge
+                </h3>
+                <p class="panelist-contact">
+                </p>
+                <p class="panelist-expertise">
+                  Senior Metallurgist at Mutanda Mining 
+                </p>
+              </div>
+            </div>
+            <div class="panelist-card">
+              <div class="panelist-image">
+                <img
+                  src="assets/dodo_mbay.jpeg"
+                  alt="Dodo Mbay"
+                >
+              </div>
+              <div class="panelist-details">
+                <h3 class="panelist-name mining-font">
+                  Mr Dodo Mbay
+                </h3>
+                <p class="panelist-contact">
+                </p>
+                <p class="panelist-expertise">
+                  Executive Concentrators chez Kamoa Copper SA
+                </p>
+              </div>
+            </div>
+            <div class="panelist-card">
+              <div class="panelist-image">
+                <img
+                  src="assets/nique_karaj_a_zeng.jpeg"
+                  alt="Nique Karaj A Zeng"
+                >
+              </div>
+              <div class="panelist-details">
+                <h3 class="panelist-name mining-font">
+                  Mme Nique KARAJ A ZENG
+                </h3>
+                <p class="panelist-contact">
+                </p>
+                <p class="panelist-expertise">
+                  Geologist & Database Administrator chez Kamoa Copper S.A.
+                </p>
+              </div>
+            </div>
+            <div class="panelist-card">
+              <div class="panelist-image">
+                <img
+                  src="assets/corneille_kavula.jpeg"
+                  alt="Corneille Kavula"
+                >
+              </div>
+              <div class="panelist-details">
+                <h3 class="panelist-name mining-font">
+                  Mr. Corneille Kavula
+                </h3>
+                <p class="panelist-contact">
+                </p>
+                <p class="panelist-expertise">
+                  Superintendent Residues Storage Facility chez Erg Metalkol
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Services Section -->
+      <section id="services" class="section services-section">
+        <div class="container">
+          <h2 class="section-title mining-font mining-text-shadow">
+            Participation
+          </h2>
+          <div class="services">
+            <div class="service-card">
+              <h3 class="mining-font">Participant ?</h3>
+              <p>
+                Veuillez suivre ce lien vers votre carte de participation
+                digitale pour accéder à tous les détails de l'événement.
+              </p>
+              <a href="https://participants.rocheaumetal.online" class="btn"
+              >Carte de participation</a>
+            </div>
+
+            <div class="service-card">
+              <h3 class="mining-font">Organisateur ou Protocole ?</h3>
+              <p>
+                Veuillez suivre ce lien pour vérifier et valider les cartes de
+                participations en temps réel.
+              </p>
+              <a href="#" class="btn protected-link" data-type="verifier"
+              >Vérifier les cartes</a>
+            </div>
+
+            <div class="service-card">
+              <h3 class="mining-font">Analyse et Rapports</h3>
+              <p>
+                Accédez aux analyses et rapports en temps réel pour obtenir des
+                informations détaillées sur l'événement.
+              </p>
+              <a href="#" class="btn protected-link" data-type="analyses"
+              >Voir les analyses</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Footer -->
+    <footer id="contact" class="footer">
+      <div class="footer-content">
+        <div class="footer-links">
+          <a
+            href="https://www.linkedin.com/showcase/go-talent-event/posts/?feedView=all"
+            target="_blank"
+          >Go-Talent Event LinkedIn</a>
+        </div>
+
+        <div class="footer-text">
+          <p>&copy; 2025 Go-Talent Event. Tous droits réservés.</p>
+          <div>
+            Built with ❤️ by Eddy Ntambwe
+            <div class="social-links">
+              <a
+                href="https://github.com/eddydarell"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="GitHub"
+              >
+                <svg
+                  viewBox="0 0 1024 1024"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M8 0C3.58 0 0 3.58 0 8C0 11.54 2.29 14.53 5.47 15.59C5.87 15.66 6.02 15.42 6.02 15.21C6.02 15.02 6.01 14.39 6.01 13.72C4 14.09 3.48 13.23 3.32 12.78C3.23 12.55 2.84 11.84 2.5 11.65C2.22 11.5 1.82 11.13 2.49 11.12C3.12 11.11 3.57 11.7 3.72 11.94C4.44 13.15 5.59 12.81 6.05 12.6C6.12 12.08 6.33 11.73 6.56 11.53C4.78 11.33 2.92 10.64 2.92 7.58C2.92 6.71 3.23 5.99 3.74 5.43C3.66 5.23 3.38 4.41 3.82 3.31C3.82 3.31 4.49 3.1 6.02 4.13C6.66 3.95 7.34 3.86 8.02 3.86C8.7 3.86 9.38 3.95 10.02 4.13C11.55 3.09 12.22 3.31 12.22 3.31C12.66 4.41 12.38 5.23 12.3 5.43C12.81 5.99 13.12 6.7 13.12 7.58C13.12 10.65 11.25 11.33 9.47 11.53C9.76 11.78 10.01 12.26 10.01 13.01C10.01 14.08 10 14.94 10 15.21C10 15.42 10.15 15.67 10.55 15.59C13.71 14.53 16 11.53 16 8C16 3.58 12.42 0 8 0Z"
+                    transform="scale(64)"
+                    fill="currentColor"
+                  />
+                </svg>
+              </a>
+              <a
+                href="https://www.linkedin.com/in/eddy-ntambwe-31b785b7/"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="LinkedIn"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  preserveAspectRatio="xMidYMid"
+                  viewBox="0 0 256 256"
+                >
+                  <path
+                    d="M218.123 218.127h-37.931v-59.403c0-14.165-.253-32.4-19.728-32.4-19.756 0-22.779 15.434-22.779 31.369v60.43h-37.93V95.967h36.413v16.694h.51a39.907 39.907 0 0 1 35.928-19.733c38.445 0 45.533 25.288 45.533 58.186l-.016 67.013ZM56.955 79.27c-12.157.002-22.014-9.852-22.016-22.009-.002-12.157 9.851-22.014 22.008-22.016 12.157-.003 22.014 9.851 22.016 22.008A22.013 22.013 0 0 1 56.955 79.27m18.966 138.858H37.95V95.967h37.97v122.16ZM237.033.018H18.89C8.58-.098.125 8.161-.001 18.471v219.053c.122 10.315 8.576 18.582 18.89 18.474h218.144c10.336.128 18.823-8.139 18.966-18.474V18.454c-.147-10.33-8.635-18.588-18.966-18.453"
+                    fill="currentColor"
+                  />
+                </svg>
+              </a>
+              <a
+                href="https://x.com/eddydarell"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="X (Twitter)"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 1200 1227"
+                >
+                  <path
+                    fill="currentColor"
+                    d="M714.163 519.284 1160.89 0h-105.86L667.137 450.887 357.328 0H0l468.492 681.821L0 1226.37h105.866l409.625-476.152 327.181 476.152H1200L714.137 519.284h.026ZM569.165 687.828l-47.468-67.894-377.686-540.24h162.604l304.797 435.991 47.468 67.894 396.2 566.721H892.476L569.165 687.854v-.026Z"
+                  />
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Password Popover -->
+    <div id="passwordOverlay" class="password-overlay">
+      <div class="password-popover">
+        <h3 class="mining-font">Accès Protégé</h3>
+        <p id="passwordMessage">Veuillez entrer le mot de passe pour accéder à cette section.</p>
+        <input type="password" id="passwordInput" class="password-input" placeholder="Mot de passe">
+        <div class="password-error" id="passwordError">Mot de passe incorrect. Veuillez réessayer.</div>
+        <div class="password-buttons">
+          <button class="password-btn submit" id="passwordSubmit">Valider</button>
+          <button class="password-btn cancel" id="passwordCancel">Annuler</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Password constants
+      const PASSWORDS = {
+        verifier: "GoTalent2025!Verify",
+        analyses: "Stats@GoTalent2025"
+      };
+
+      const PROTECTED_URLS = {
+        verifier: "https://hotes.rocheaumetal.online",
+        analyses: "https://stats.rocheaumetal.online"
+      };
+
+      // Password popover functionality
+      let currentLinkType = null;
+
+      function showPasswordPopover(linkType) {
+        currentLinkType = linkType;
+        const overlay = document.getElementById('passwordOverlay');
+        const message = document.getElementById('passwordMessage');
+        const input = document.getElementById('passwordInput');
+        const error = document.getElementById('passwordError');
+        
+        // Set appropriate message
+        if (linkType === 'verifier') {
+          message.textContent = "Veuillez entrer le mot de passe pour accéder à la vérification des cartes.";
+        } else if (linkType === 'analyses') {
+          message.textContent = "Veuillez entrer le mot de passe pour accéder aux analyses et rapports.";
+        }
+        
+        // Clear previous values
+        input.value = '';
+        error.classList.remove('show');
+        
+        // Show overlay
+        overlay.classList.add('show');
+        
+        // Focus on input
+        setTimeout(() => {
+          input.focus();
+        }, 300);
+      }
+
+      function hidePasswordPopover() {
+        const overlay = document.getElementById('passwordOverlay');
+        overlay.classList.remove('show');
+        currentLinkType = null;
+      }
+
+      function checkPassword() {
+        const input = document.getElementById('passwordInput');
+        const error = document.getElementById('passwordError');
+        const enteredPassword = input.value;
+        
+        if (currentLinkType && PASSWORDS[currentLinkType] === enteredPassword) {
+          // Correct password - redirect
+          hidePasswordPopover();
+          
+          // Try window.open first, fallback to direct navigation
+          const newWindow = window.open(PROTECTED_URLS[currentLinkType], '_blank');
+          
+          // If window.open was blocked, navigate directly
+          if (!newWindow || newWindow.closed || typeof newWindow.closed == 'undefined') {
+            window.location.href = PROTECTED_URLS[currentLinkType];
+          }
+        } else {
+          // Incorrect password - show error
+          error.classList.add('show');
+          input.value = '';
+          input.focus();
+        }
+      }
+
+      // Text ribbon functionality (adapted from participant app)
+      const ribbonWords = [
+        "MULTI-GENERATION",
+        "TRANSMISSION",
+        "INSPIRATION",
+        "TRÉSOR",
+        "MENTOR",
+        "COACHING",
+        "LEADERSHIP",
+        "POTENTIAL",
+        "SKILLS",
+        "COMPÉTENCES",
+        "COMMUNICATION",
+        "TRANSFORMATION",
+        "WORK HARD",
+        "WORKING",
+        "LIBRARY",
+        "MINE",
+        "ROCHE",
+        "MINERAL",
+        "ORIENTATION",
+        "HYDROGÉOLOGIE",
+        "GÉOLOGIE",
+        "FINANCE",
+        "CAPACITY",
+        "BUILD",
+        "MOTIVATION",
+        "DIGITAL",
+        "OPTIMIZATION",
+        "EXPLORATION",
+        "PRODUCTION",
+        "SYSTEMS",
+        "TECHNOLOGIE",
+        "INFORMATION",
+        "DATA",
+        "INDUSTRIELS",
+        "EXPERTS",
+        "EXPERTISE",
+        "SPECIALIST",
+        "INNOVATION",
+        "COLLABORATION",
+        "NETWORKING",
+        "SUCCESS",
+        "GO",
+        "TALENT",
+        "ÉQUIPE",
+        "STRATÉGIE",
+        "DÉVELOPPEMENT",
+        "OBJECTIFS",
+        "PERFORMANCE",
+        "EFFICACITÉ",
+        "GO-TALENT",
+        "MULTI_GENERATIONNEL",
+        "SAVOIR-FAIRE",
+        "EXPERTISE",
+        "INNOVATION",
+        "COLLABORATION",
+        "NETWORKING",
+        "SUCCESS",
+        "GO",
+        "TALENT",
+        "ÉQUIPE",
+        "STRATÉGIE",
+        "DÉVELOPPEMENT",
+        "OBJECTIFS",
+        "PERFORMANCE",
+        "EFFICACITÉ",
+        "INSPIRATION",
+      ];
+
+      function createTextRibbons() {
+        const container = document.getElementById(
+          "textRibbonContainer",
+        );
+
+        const ribbonHeight = 60;
+        const containerHeight = window.innerHeight * 1.2;
+        const numRibbons = Math.ceil(containerHeight / ribbonHeight) +
+          100;
+
+        for (let i = 0; i < numRibbons; i++) {
+          const ribbon = document.createElement("div");
+          ribbon.className = `text-ribbon color-${(i % 5) + 1}`;
+          ribbon.style.top = `${i * ribbonHeight}px`;
+          ribbon.style.fontSize = `${1.2 + Math.random() * 0.4}rem`;
+          ribbon.style.animationDuration = `${
+            760 + Math.random() * 80
+          }s`;
+          ribbon.style.animationDelay = `${Math.random() * -500}s`;
+
+          const shuffledWords = [...ribbonWords].sort(() =>
+            Math.random() - 0.5
+          );
+
+          ribbon.innerHTML = shuffledWords.map((word) =>
+            `<span class="ribbon-word">${word}</span>`
+          ).join(" • ");
+
+          container.appendChild(ribbon);
+        }
+      }
+
+      function startHighlighting() {
+        setInterval(() => {
+          const allWords = document.querySelectorAll(".ribbon-word");
+
+          // Remove previous highlights
+          const previousHighlights = document.querySelectorAll(
+            ".ribbon-word.highlighted",
+          );
+          previousHighlights.forEach((word) =>
+            word.classList.remove("highlighted")
+          );
+
+          // Add new highlights
+          const numHighlights = 3 + Math.floor(Math.random() * 3);
+          const shuffled = Array.from(allWords).sort(() =>
+            Math.random() - 0.1
+          );
+          const newHighlights = shuffled.slice(0, numHighlights);
+
+          newHighlights.forEach((word) => {
+            word.classList.add("highlighted");
+          });
+        }, 20);
+      }
+
+      // Smooth scrolling for navigation links
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener("click", function (e) {
+          e.preventDefault();
+          const target = document.querySelector(
+            this.getAttribute("href"),
+          );
+          if (target) {
+            target.scrollIntoView({
+              behavior: "smooth",
+              block: "start",
+            });
+          }
+        });
+      });
+
+      // Show/hide navigation bar based on scroll position
+      function handleNavbarVisibility() {
+        const navbar = document.getElementById("navbar");
+        const logo = document.querySelector(".logo");
+        const logoRect = logo.getBoundingClientRect();
+
+        if (logoRect.bottom < 0) {
+          navbar.classList.add("visible");
+        } else {
+          navbar.classList.remove("visible");
+        }
+      }
+
+      // Initialize
+      document.addEventListener("DOMContentLoaded", function () {
+        createTextRibbons();
+        startHighlighting();
+
+        // Add scroll listener for navbar
+        window.addEventListener("scroll", handleNavbarVisibility);
+        handleNavbarVisibility(); // Check initial state
+
+        // Add event listeners for protected links
+        document.querySelectorAll('.protected-link').forEach(link => {
+          link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const linkType = this.getAttribute('data-type');
+            showPasswordPopover(linkType);
+          });
+        });
+
+        // Add event listeners for password popover
+        document.getElementById('passwordSubmit').addEventListener('click', checkPassword);
+        document.getElementById('passwordCancel').addEventListener('click', hidePasswordPopover);
+        
+        // Add Enter key support for password input
+        document.getElementById('passwordInput').addEventListener('keypress', function(e) {
+          if (e.key === 'Enter') {
+            checkPassword();
+          }
+        });
+
+        // Close popover when clicking outside
+        document.getElementById('passwordOverlay').addEventListener('click', function(e) {
+          if (e.target === this) {
+            hidePasswordPopover();
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

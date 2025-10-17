@@ -1,0 +1,79 @@
+# GoTalent Caddy Reverse Proxy Configuration
+# Routes all microservices through a unified entry point
+
+{
+    # Global options
+    admin off
+    auto_https off
+}
+
+# Main site on port 80
+:80 {
+    # Enable compression
+    encode gzip zstd
+
+    # Logging
+    log {
+        output stdout
+        format console
+        level INFO
+    }
+
+    # Landing page (root)
+    handle / {
+        reverse_proxy landing:80
+    }
+
+    # Form service
+    handle_path /form* {
+        reverse_proxy form:3002
+    }
+
+    # Badge service
+    handle_path /badge* {
+        reverse_proxy badge:3003
+    }
+
+    # Scanner service
+    handle_path /scanner* {
+        reverse_proxy scanner:3004
+    }
+
+    # Adminer database interface
+    handle_path /db* {
+        reverse_proxy adminer:8080
+    }
+
+    # API endpoints - route to appropriate service based on path
+    handle /api/inscriptions* {
+        reverse_proxy form:3002
+    }
+
+    handle /api/participants* {
+        reverse_proxy badge:3003 scanner:3004 {
+            lb_policy round_robin
+            health_uri /api/health
+            health_interval 30s
+            health_timeout 5s
+        }
+    }
+
+    handle /api/check-registration* {
+        reverse_proxy scanner:3004
+    }
+
+    # Health check endpoint
+    handle /health {
+        respond "OK" 200
+    }
+
+    # Default handler for unmatched routes
+    handle {
+        reverse_proxy landing:80
+    }
+}
+
+# Development domain (optional)
+# localhost:80 {
+#     import :80
+# }

@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  gotalent-app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      # Set to 'true' to force database re-seeding on startup
+      - FORCE_SEED=false
+    volumes:
+      # Persist database between container restarts
+      - gotalent-data:/app/participants.db
+      # Optional: Mount data directory for easy access to seed files
+      - ./data:/app/data:ro
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+volumes:
+  gotalent-data:
+    driver: local
