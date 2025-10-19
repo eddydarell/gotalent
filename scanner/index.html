@@ -3,14 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Cache Control Meta Tags - Disable Caching -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
     <meta name="theme-color" content="#2563eb">
-    <title>Go-Talent Event Scanner - Atelier d'Échanges: De la roche au métal</title>
+    <title>Go-Talent Event Scanner - Atelier d'Échanges</title>
 
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/logo.svg">
     <link rel="alternate icon" href="/favicon.ico">
 
-    <!-- PWA Manifest will be injected by Vite PWA plugin -->
+    <!-- Manifest for web app -->
+    <link rel="manifest" href="/manifest.json">
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -109,9 +116,9 @@
         <!-- Header -->
         <div class="text-center mb-4">
             <h1 class="text-xl text-gray-600 ">Atelier d'échanges</h1>
-            <h1 class="text-2xl font-bold text-gray-900 mb-2">DE LA ROCHE AU METAL</h1>
+            <h1 class="text-2xl font-bold text-gray-900 mb-2">L'HUMAIN AU CENTRE</h1>
             <p class="text-gray-600 text-sm">Scannez le QR code des participants pour vérifier leur inscription à l'événement</p>
-            <p class="text-gray-600 text-sm">Chaque participant peut générer son propre code QR en visitant son profil à l'adresse suivante : <a href="#" class="text-blue-600">monprofil.gotalent.com</a>.</p>
+            <!-- <p class="text-gray-600 text-sm">Chaque participant peut générer son propre code QR en visitant son profil à l'adresse suivante : <a href="#" class="text-blue-600">monprofil.gotalent.com</a>.</p> -->
         </div>
 
         <!-- Main Content -->
@@ -120,7 +127,7 @@
             <div id="permission-request" class="bg-white rounded-xl shadow-lg p-4 text-center">
                 <!-- Welcome Section (hidden when scanning) -->
                 <div id="welcome-section" class="mb-4 mt-2">
-                    <div class="w-56 h-56 border border-2 rounded-xl flex items-center justify-center mx-auto mb-4">
+                    <div class="w-56 h-56 border-2 rounded-xl flex items-center justify-center mx-auto mb-4">
                         <svg id="qr-logo" xmlns="http://www.w3.org/2000/svg" width="800px" height="800px" viewBox="0 0 24 24" fill="#2563eb"><path d="M3 9h6V3H3zm1-5h4v4H4zm1 1h2v2H5zm10 4h6V3h-6zm1-5h4v4h-4zm1 1h2v2h-2zM3 21h6v-6H3zm1-5h4v4H4zm1 1h2v2H5zm15 2h1v2h-2v-3h1zm0-3h1v1h-1zm0-1v1h-1v-1zm-10 2h1v4h-1v-4zm-4-7v2H4v-1H3v-1h3zm4-3h1v1h-1zm3-3v2h-1V3h2v1zm-3 0h1v1h-1zm10 8h1v2h-2v-1h1zm-1-2v1h-2v2h-2v-1h1v-2h3zm-7 4h-1v-1h-1v-1h2v2zm6 2h1v1h-1zm2-5v1h-1v-1zm-9 3v1h-1v-1zm6 5h1v2h-2v-2zm-3 0h1v1h-1v1h-2v-1h1v-1zm0-1v-1h2v1zm0-5h1v3h-1v1h-1v1h-1v-2h-1v-1h3v-1h-1v-1zm-9 0v1H4v-1zm12 4h-1v-1h1zm1-2h-2v-1h2zM8 10h1v1H8v1h1v2H8v-1H7v1H6v-2h1v-2zm3 0V8h3v3h-2v-1h1V9h-1v1zm0-4h1v1h-1zm-1 4h1v1h-1zm3-3V6h1v1z"/><path fill="none" d="M0 0h24v24H0z"/></svg>
                     </div>
                     <p class="text-gray-600 mb-4">Choisissez comment vous souhaitez vérifier l'inscription à l'événement</p>
@@ -309,6 +316,26 @@
     <!-- Scripts -->
     <script type="module" src="/src/main.js"></script>
     
-    <!-- Service Worker Registration will be handled by Vite PWA plugin -->
+    <!-- Unregister any existing service workers -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                for (let registration of registrations) {
+                    registration.unregister().then(function(success) {
+                        console.log('Service worker unregistered successfully:', success);
+                    });
+                }
+            });
+            
+            // Clear all caches
+            if ('caches' in window) {
+                caches.keys().then(function(names) {
+                    for (let name of names) {
+                        caches.delete(name);
+                    }
+                });
+            }
+        }
+    </script>
 </body>
 </html>

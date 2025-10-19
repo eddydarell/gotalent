@@ -5,14 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Go Talent - Atelier d'échanges</title>
     
-    <!-- Cache Control Meta Tags - Disable Caching -->
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
-    
-    <!-- Theme and Description -->
+    <!-- PWA Meta Tags -->
     <meta name="theme-color" content="#DAA520">
-    <meta name="description" content="Application Go Talent pour Atelier d'échanges - L'Humain Au Centre">
+    <meta name="description" content="Application Go Talent pour Atelier d'échanges - De la Roche au Métal">
     <link rel="manifest" href="/manifest.json">
     <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
     <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-32x32.png">
@@ -46,8 +41,8 @@
                                     </div>
                                 </div>
                                 <p class="text-xs mb-4" style="color: #F3E5AB;">Go-Talent Event vous accueille à son atelier d'échange</p>
-                                <h1 class="text-2xl font-bold my-2 mining-text-shadow mining-font" style="color: #DAA520;">L'Humain Au Centre</h1>
-                                <p class="text-sm mt-2 id-card-font" style="color: #F3E5AB;">Compétences recherchées pour mieux servir</p>
+                                <h1 class="text-2xl font-bold my-2 mining-text-shadow mining-font" style="color: #DAA520;">DE LA ROCHE AU MÉTAL</h1>
+                                <p class="text-sm mt-2 id-card-font" style="color: #F3E5AB;">La Chaîne de Valeur</p>
                             </div>
                             
                             <form id="loginForm" class="space-y-6">
@@ -93,7 +88,7 @@
                         <div class="p-4 text-center" style="background-color: #2C1810;">
                             <h2 class="text-xl font-bold mining-text-shadow mining-font" style="color: #F3E5AB;">Carte de participation</h2>
                             <p class="text-sm id-card-font" style="color: #F3E5AB;">Atelier d'échange</p>
-                            <p class="text-sm id-card-font" style="color: #DAA520;">L'Humain Au Centre</p>
+                            <p class="text-sm id-card-font" style="color: #DAA520;">De la Roche au Métal</p>
                         </div>
                         
                         <!-- Scrollable Card Content -->
@@ -152,7 +147,36 @@
                                     <!-- Detailed participant info will be populated here -->
                                 </div>
 
-                
+                                <div style="color: #F3E5AB;" id="programDetails">
+                                    <div class="mb-4">
+                                        <h4 class="font-bold text-base mb-3" style="color: #DAA520;">Programme de l'Atelier</h4>
+                                        <div class="text-center mb-4">
+                                            <p class="text-sm font-semibold mb-2">KOLWEZI, KAMPI YA BOMA LE 9 AOÛT 2025</p>
+                                            <p class="text-sm">LE 9 AOÛT 2025 - DE 12H00-18H30</p>
+                                        </div>
+                                        
+                                        <div class="space-y-4">
+                                            <div class="panel-item p-3 rounded-lg glass-morphism-light" style="border: 1px solid #DAA520;">
+                                                <h5 class="font-bold text-sm mb-1" style="color: #DAA520;">PANEL 1:</h5>
+                                                <p class="text-sm">EXPLORATION & EXPLOITATION</p>
+                                            </div>
+                                            
+                                            <div class="panel-item p-3 rounded-lg glass-morphism-light" style="border: 1px solid #DAA520;">
+                                                <h5 class="font-bold text-sm mb-1" style="color: #DAA520;">PANEL 2:</h5>
+                                                <p class="text-sm">CHIMIE ET MÉTALLURGIE</p>
+                                            </div>
+                                            
+                                            <div class="panel-item p-3 rounded-lg glass-morphism-light" style="border: 1px solid #DAA520;">
+                                                <h5 class="font-bold text-sm mb-1" style="color: #DAA520;">PANEL 3:</h5>
+                                                <p class="text-sm">LEARNING ET DÉVELOPPEMENT</p>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="mt-4 text-center">
+                                            <p class="text-xs" style="color: #8B7355;">Organisé par Go-Talent Event</p>
+                                        </div>
+                                    </div>
+                                </div>
 
                                 <!-- Scroll Up Button -->
                                 <div class="scroll-up-section">
@@ -235,27 +259,5 @@
 
     <!-- Scripts -->
     <script type="module" src="/src/main.js"></script>
-    
-    <!-- Unregister any existing service workers -->
-    <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.getRegistrations().then(function(registrations) {
-                for (let registration of registrations) {
-                    registration.unregister().then(function(success) {
-                        console.log('Service worker unregistered successfully:', success);
-                    });
-                }
-            });
-            
-            // Clear all caches
-            if ('caches' in window) {
-                caches.keys().then(function(names) {
-                    for (let name of names) {
-                        caches.delete(name);
-                    }
-                });
-            }
-        }
-    </script>
 </body>
 </html>

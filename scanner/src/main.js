@@ -868,7 +868,9 @@ document.addEventListener('DOMContentLoaded', () => {
     new QRScannerApp();
 });
 
-// Register service worker if supported
+// Service worker disabled to avoid caching issues
+// PWA functionality removed to ensure fresh content on every load
+/*
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', async () => {
         try {
@@ -879,3 +881,4 @@ if ('serviceWorker' in navigator) {
         }
     });
 }
+*/

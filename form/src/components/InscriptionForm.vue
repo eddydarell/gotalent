@@ -4,20 +4,20 @@
       <!-- Logo Section -->
       <div class="text-center pa-4 logo-section position-relative">
         <v-img 
-          src="/assets/logo.png"
+          src="assets/logo.png"
           alt="Go Talent Event Logo" 
           max-width="150"
           max-height="150"
           class="mx-auto logo-image"
         />
         <!-- Theme Toggle Button -->
-        <v-fab
+        <!-- <v-fab
           :icon="isDark ? 'mdi-weather-sunny' : 'mdi-weather-night'"
           @click="toggleTheme"
           color="accent"
           class="theme-toggle-btn position-absolute"
           style="bottom: -25px; right: 16px; z-index: 10; border-radius: 50%;"
-        />
+        /> -->
       </div>
       
       <v-card-title class="text-h4 text-center gradient-header">
@@ -29,6 +29,9 @@
           <small>Samedi, 6 Décembre 2025, Novotel, Kolwezi</small>
         </div>
       </v-card-title>
+      
+      <!-- Payment Information -->
+      <PaymentInfo />
 
       <!-- Countdown Timer -->
       <CountdownTimer :deadline="eventDeadline" />
@@ -229,6 +232,7 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useFormStore } from '@/stores/form'
 import { useTheme } from 'vuetify'
+import PaymentInfo from './PaymentInfo.vue'
 import CountdownTimer from './CountdownTimer.vue'
 import PersonalInfoStep from './steps/PersonalInfoStep.vue'
 import EducationStep from './steps/EducationStep.vue'
@@ -294,6 +298,7 @@ const steps = [
 // Methods
 const nextStep = () => {
   if (formStore.validateCurrentStep()) {
+    // Terms dialog check removed - seamless flow from personal to professional to event info
     if (currentStep.value === 2 && !formStore.formData.accepteTermes) {
       showTermsDialog.value = true
       return

@@ -1,9 +1,9 @@
 {
     "name": "Go Talent",
     "short_name": "GoTalent",
-    "description": "Application PWA pour l'événement minier Go Talent",
+    "description": "Application web pour l'événement minier Go Talent",
     "start_url": "/",
-    "display": "standalone",
+    "display": "browser",
     "background_color": "#1a202c",
     "theme_color": "#667eea",
     "orientation": "portrait-primary",

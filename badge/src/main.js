@@ -8,44 +8,19 @@ class GoTalentApp {
         this.participants = [];
         this.currentParticipant = null;
         this.apiBaseUrl = window.location.origin; // Use current domain for API calls
-        // this.ribbonWords = [
-        //     'EXCAVATION', 'EXTRACTION', 'CONCASSAGE', 'BROYAGE', 'FLOTATION', 'LIXIVIATION',
-        //     'FUSION', 'AFFINAGE', 'TRAITEMENT', 'CONCENTRATION', 'SÉPARATION', 'PURIFICATION',
-        //     'EXPLORATION', 'GÉOLOGIE', 'FORAGE', 'DYNAMITAGE', 'TRANSPORT', 'STOCKAGE',
-        //     'SÉCURITÉ', 'ENVIRONNEMENT', 'INNOVATION', 'TECHNOLOGIE', 'DURABILITÉ', 'QUALITÉ',
-        //     'PRODUCTION', 'LOGISTIQUE', 'GESTION', 'ÉQUIPEMENT', 'MAINTENANCE', 'FORMATION',
-        //     'COLLABORATION', 'PARTENARIAT', 'RÉSEAU', 'COMMUNICATION', 'STRATÉGIE', 'PLANIFICATION',
-        //     'ANALYSE', 'OPTIMISATION', 'PERFORMANCE', 'EFFICACITÉ', 'SOUTIEN', 'RÉGLEMENTATION',
-        //     'CONFORMITÉ', 'AUDIT', 'SÉCURITÉ', 'RÉNOVATION', 'RECYCLAGE', 'NETWORKING',
-        //     'COLLABORATION', 'PARTAGE', 'INFORMATION', 'RESSOURCES',
-        //     'DÉVELOPPEMENT', 'PROJET', 'OBJECTIF', 'STRATÉGIE', 'PLAN', 'RÉSULTAT',
-        //     'EFFICACITÉ', 'OPTIMISATION', 'PERFORMANCE', 'RESEAU', 'SUCCÈS',
-        //     "PROSPECTION", "CARTOGRAPHIE", "GISEMENT", "MINÉRALOGIE", "GÉOANALYSE", "CAROTTAGE", "SONDAGE", "MÉTALLURGIE", "FRAGMENTATION", "CRIBLAGE",
-        //     "TAMISAGE", "ÉCHANTILLONNAGE", "HYDROCYCLONAGE", "DESSALEMENT", "DÉSHYDRATATION", "DÉCANTATION", "ÉPAISSISSEMENT", "FILTRATION", "CLARIFICATION", "RAFFINAGE",
-        //     "PYROMÉTALLURGIE", "HYDROMÉTALLURGIE", "BIOLEACHING", "ÉLECTROLYSE", "FONDERIE", "ALLIAGE", "COULÉE", "GRANULOMÉTRIE", "CONCENTRATEUR", "RENDEMENT",
-        //     "VALORISATION", "RÉSIDUS", "STÉRILES", "REJETS", "DÉPOUSSIÉRAGE", "VENTILATION", "DÉVELOPPEMENT DURABLE", "RESPONSABILITÉ", "TRACABILITÉ", "CERTIFICATION",
-        //     "NORMALISATION", "INDICATEUR", "REPORTING", "GOUVERNANCE", "COORDINATION", "PILOTAGE", "SUPERVISION", "ENCADREMENT", "COMPÉTENCE", "EXPERTISE",
-        //     "SAVOIR-FAIRE", "TRANSFERT", "ACCOMPAGNEMENT", "SÉMINAIRE", "SENSIBILISATION", "PRÉVENTION", "RISQUE", "URGENCE", "INTERVENTION", "SURVEILLANCE",
-        //     "CONTRÔLE", "INSPECTION", "MAINTENANCE PRÉVENTIVE", "DÉPANNAGE", "DISPONIBILITÉ", "FIABILITÉ", "PRODUCTIVITÉ", "RENTABILITÉ", "COÛT", "BUDGET",
-        //     "FINANCEMENT", "INVESTISSEMENT", "PLAN D’ACTION", "CAHIER DES CHARGES", "LIVRABLE", "ÉTUDE", "FAISABILITÉ", "BENCHMARKING", "INNOVATION TECHNOLOGIQUE", "NUMÉRISATION",
-        //     "AUTOMATISATION", "ROBOTISATION", "INTELLIGENCE ARTIFICIELLE", "SIMULATION", "MODÉLISATION", "SYSTÈME D’INFORMATION", "SIG", "CAPTEUR", "DONNÉES", "BIG DATA",
-        //     "TABLEAU DE BORD", "INDICE", "KPI", "AMÉLIORATION CONTINUE", "CYCLE DE VIE", "ÉCONOMIE CIRCULAIRE", "TRANSITION ÉNERGÉTIQUE", "ACCEPTABILITÉ SOCIALE", "LICENCE D’EXPLOITATION", "CONFORMITÉ ENVIRONNEMENTALE", "GO-TALENT", "NETWORKING", "SUCCESS", "GO", "TALENT",
-
-        // ];
-
         this.ribbonWords = [
             "MULTI-GENERATION", "TRANSMISSION", "INSPIRATION", "TRÉSOR", "MENTOR",
-            "COACHING", "LEADERSHIP", "POTENTIAL", "SKILLS", "COMPÉTENCES",
-            "COMMUNICATION", "TRANSFORMATION", "WORK HARD", "WORKING", "LIBRARY",
-            "MINE", "ROCHE", "MINERAL", "ORIENTATION", "HYDROGÉOLOGIE",
-            "GÉOLOGIE", "FINANCE", "CAPACITY", "BUILD", "MOTIVATION",
-            "DIGITAL", "OPTIMIZATION", "EXPLORATION", "PRODUCTION", "SYSTEMS",
-            "TECHNOLOGIE", "INFORMATION", "DATA", "INDUSTRIELS", "EXPERTS",
-            "EXPERTISE", "SPECIALIST", "INNOVATION", "COLLABORATION", "NETWORKING",
-            "SUCCESS", "GO", "TALENT", "ÉQUIPE", "STRATÉGIE",
+            "COACHING", "LEADERSHIP", "POTENTIEL", "COMPÉTENCES",
+            "COMMUNICATION", "TRANSFORMATION", "TRAVAIL ACHARNÉ", "TRAVAIL", "BIBLIOTHÈQUE",
+            "MINE", "HUMAIN", "HOMME", "ORIENTATION", "FEMME",
+            "RH", "RESSOURCES", "RESSOURCES HUMAINES", "CONSTRUCTION", "MOTIVATION",
+            "NUMÉRIQUE", "OPTIMISATION", "EXPLORATION", "PRODUCTION", "SYSTÈMES",
+            "TECHNOLOGIE", "INFORMATION", "DONNÉES", "INDUSTRIELS", "EXPERTS",
+            "EXPERTISE", "SPÉCIALISTE", "INNOVATION", "COLLABORATION", "RÉSEAUTAGE",
+            "SUCCÈS", "GO", "TALENT", "ÉQUIPE", "STRATÉGIE",
             "DÉVELOPPEMENT", "OBJECTIFS", "PERFORMANCE", "EFFICACITÉ", "GO-TALENT",
-            "MULTI_GENERATIONNEL", "SAVOIR-FAIRE", "EXPERTISE", "INNOVATION", "COLLABORATION",
-            "NETWORKING", "SUCCESS", "GO", "TALENT", "ÉQUIPE",
+            "MULTI-GÉNÉRATIONNEL", "SAVOIR-FAIRE", "EXPERTISE", "INNOVATION", "COLLABORATION",
+            "RÉSEAUTAGE", "SUCCÈS", "GO", "TALENT", "ÉQUIPE",
             "STRATÉGIE", "DÉVELOPPEMENT", "OBJECTIFS", "PERFORMANCE", "EFFICACITÉ",
             "INSPIRATION",
         ]
@@ -335,6 +310,7 @@ class GoTalentApp {
     }
 
     displayDetailedInfo(participant) {
+        console.log('Displaying detailed info for participant:', participant);
         const detailsContainer = document.getElementById('participantDetails');
         detailsContainer.innerHTML = `
             <div class="space-y-4 text-sm">
@@ -407,7 +383,7 @@ class GoTalentApp {
                 <div class="mt-4 pt-3 border-t border-amber-600">
                     <div class="space-y-1">
                         <div class="text-xs" style="color: #DAA520;">
-                            Date d'inscription: ${new Date(participant.timestamp).toLocaleDateString('fr-FR', {
+                            Date d'inscription: ${new Date(participant.registrationDate).toLocaleDateString('fr-FR', {
                                 year: 'numeric',
                                 month: 'long',
                                 day: 'numeric',
@@ -680,7 +656,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 100);
 });
 
-// Register service worker
+// Service worker disabled to avoid caching issues
+// PWA functionality removed to ensure fresh content on every load
+/*
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
         navigator.serviceWorker.register('/sw.js')
@@ -692,3 +670,4 @@ if ('serviceWorker' in navigator) {
             });
     });
 }
+*/

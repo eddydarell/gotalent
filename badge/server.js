@@ -261,7 +261,32 @@ const server = Bun.serve({
     const file = Bun.file(distPath);
     
     if (await file.exists()) {
-      return new Response(file);
+      // Add cache-control headers to prevent caching
+      const headers = {
+        "Cache-Control": "no-cache, no-store, must-revalidate",
+        "Pragma": "no-cache",
+        "Expires": "0"
+      };
+      
+      // Add content type based on file extension
+      const ext = distPath.split('.').pop();
+      const contentTypes = {
+        'html': 'text/html',
+        'css': 'text/css',
+        'js': 'application/javascript',
+        'json': 'application/json',
+        'png': 'image/png',
+        'jpg': 'image/jpeg',
+        'jpeg': 'image/jpeg',
+        'svg': 'image/svg+xml',
+        'ico': 'image/x-icon'
+      };
+      
+      if (contentTypes[ext]) {
+        headers['Content-Type'] = contentTypes[ext];
+      }
+      
+      return new Response(file, { headers });
     }
     
     // 404 Not Found
